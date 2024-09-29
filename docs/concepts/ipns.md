@@ -1,65 +1,65 @@
 ---
-title: IPNS (InterPlanetary Name System)
-description: Learn about mutability in IPFS, InterPlanetary Name System (IPNS), and how it can be used in conjunction with IPFS.
+title: IPNS (星际名称系统)
+description: 了解 IPFS、星际名称系统 (IPNS) 中的可变性以及如何将其与 IPFS 结合使用。
 ---
 
-# InterPlanetary Name System (IPNS)
+# 星际名称系统 (IPNS)
 
-- [InterPlanetary Name System (IPNS)](#interplanetary-name-system-ipns)
-  - [Mutability in IPFS](#mutability-in-ipfs)
-  - [How IPNS works](#how-ipns-works)
-    - [Anatomy of an IPNS name](#anatomy-of-an-ipns-name)
-      - [How IPNS names relate to content paths](#how-ipns-names-relate-to-content-paths)
-    - [IPNS names are self-certifying](#ipns-names-are-self-certifying)
-    - [Common IPNS operations](#common-ipns-operations)
-    - [IPNS is transport agnostic](#ipns-is-transport-agnostic)
-      - [IPNS over the DHT](#ipns-over-the-dht)
-      - [IPNS over PubSub](#ipns-over-pubsub)
-        - [Publishing IPNS records over PubSub lifecycle](#publishing-ipns-records-over-pubsub-lifecycle)
-    - [Tradeoffs between consistency vs. availability](#tradeoffs-between-consistency-vs-availability)
-      - [IPNS record validity](#ipns-record-validity)
-      - [Practical considerations](#practical-considerations)
-  - [IPNS in practice](#ipns-in-practice)
-    - [Resolving IPNS names using IPFS gateways](#resolving-ipns-names-using-ipfs-gateways)
-    - [Publishing IPNS names](#publishing-ipns-names)
-  - [Alternatives to IPNS](#alternatives-to-ipns)
-  - [Further Resources](#further-resources)
+- [星际名称系统 (IPNS)](#interplanetary-name-system-ipns)
+  - [IPFS 中的可变性](#IPFS中的可变性)
+  - [IPNS 的工作原理](#how-ipns-works)
+    - [IPNS 名称的剖析](#anatomy-of-an-ipns-name)
+      - [IPNS 名称与内容路径的关系](#how-ipns-names-relate-to-content-paths)
+    - [IPNS 名称是自我认证的](#ipns-names-are-self-certifying)
+    - [常见 IPNS 操作](#common-ipns-operations)
+    - [IPNS 与传输无关](#ipns-is-transport-agnostic)
+      - [DHT 上的 IPNS](#ipns-over-the-dht)
+      - [PubSub 上的 IPNS](#ipns-over-pubsub)
+        - [在 PubSub 生命周期内发布 IPNS 记录](#publishing-ipns-records-over-pubsub-lifecycle)
+    - [一致性与可用性之间的权衡](#tradeoffs-between-consistency-vs-availability)
+      - [IPNS 记录有效性](#ipns-record-validity)
+      - [实际考虑](#practical-considerations)
+  - [IPNS 实践](#ipns-in-practice)
+    - [使用 IPFS 网关解析 IPNS 名称](#resolving-ipns-names-using-ipfs-gateways)
+    - [发布 IPNS 名称](#publishing-ipns-names)
+  - [IPNS 的替代方案](#alternatives-to-ipns)
+  - [更多资源](#further-resources)
 
-## Mutability in IPFS
+## IPFS 中的可变性
 
-[Content addressing](content-addressing.md) in IPFS is by nature _immutable_: when you add a file to IPFS, it creates a hash from the data, with which the CID is constructed. Changing a file changes its hash, and consequently its CID which is used as an address.
+IPFS 中的 [内容寻址](content-addressing.md) 本质上是 _不可变的_：当您将文件添加到 IPFS 时，它会根据数据创建一个哈希，并以此构建 CID。更改文件会更改其哈希，从而更改用作地址的 CID。
 
-Yet, there are many situations where content-addressed data needs to be regularly updated, for example, when publishing a website that frequently changes. It would be impractical to share a new CID every time you update the website. With **mutable pointers**, you can share the address of the pointer once, and update the pointer – to the new CID – every time you publish a change.
+然而，在很多情况下，内容寻址数据需要定期更新，例如，发布一个经常更改的网站。每次更新网站时都共享一个新的 CID 是不切实际的。使用 **可变指针**，您可以共享一次指针的地址，并在每次发布更改时将指针更新为新的 CID。
 
-The InterPlanetary Name System (IPNS) is a system for creating such mutable pointers to CIDs known as **names** or **IPNS names**. IPNS names can be thought of as links that can be updated over time, while retaining the verifiability of content addressing.
+星际名称系统 (IPNS) 是一种用于创建指向 CID 的可变指针（称为 **names** 或 **IPNS names**）的系统。IPNS 名称可视为可随时间更新的链接，同时保留内容寻址的可验证性。
 
 ::: callout
-An IPNS name can point to any arbitrary content path (`/ipfs/` or `/ipns/`), *including another IPNS name or DNSLink path*. However, it most commonly points to a fully resolved and immutable path, i.e. `/ipfs/[CID]`.
+IPNS 名称可以指向任意内容路径（`/ipfs/` 或 `/ipns/`），*包括另一个 IPNS 名称或 DNSLink 路径*。但是，它通常指向完全解析且不可变的路径，即 `/ipfs/[CID]`。
 :::
 
-## How IPNS works
+## IPNS 的工作原理
 
-### Anatomy of an IPNS name
+### IPNS 名称的剖析
 
-A **name** in IPNS is the [hash](hashing.md) of a public key. It is associated with an [**IPNS record**](https://github.com/ipfs/specs/blob/main/ipns/IPNS.md#ipns-record) containing the content path (`/ipfs/CID`) it links to and other information such as the expiration, the version number, and a cryptographic signature signed by the corresponding private key. New records can be signed and published at any time by the holder of the private key.
+IPNS 中的 **名称** 是公钥的 [哈希](hashing.md)。它与一个 [**IPNS 记录**](https://github.com/ipfs/specs/blob/main/ipns/IPNS.md#ipns-record) 相关联，其中包含它链接到的内容路径 (`/ipfs/CID`) 以及其他信息，例如到期日期、版本号以及由相应私钥签名的加密签名。私钥持有者可以随时签署和发布新记录。
 
-For example, the following is an IPNS name represented by a CIDv1 of public key: [`k51qzi5uqu5dlvj2baxnqndepeb86cbk3ng7n3i46uzyxzyqj2xjonzllnv0v8`](https://cid.ipfs.tech/#k51qzi5uqu5dlvj2baxnqndepeb86cbk3ng7n3i46uzyxzyqj2xjonzllnv0v8).
+例如，以下是用公钥的 CIDv1 表示的 IPNS 名称： [`k51qzi5uqu5dlvj2baxnqndepeb86cbk3ng7n3i46uzyxzyqj2xjonzllnv0v8`](https://cid.ipfs.tech/#k51qzi5uqu5dlvj2baxnqndepeb86cbk3ng7n3i46uzyxzyqj2xjonzllnv0v8).
 
-> **Note:** Kubo uses the `self` key (ed25519 private key used for the PeerID) as the default IPNS name. But you can generate multiple keys via [`ipfs key gen`](https://docs.ipfs.tech/reference/kubo/cli/#ipfs-key-gen), and use them for managing multiple IPNS names.
+> **Note:** Kubo 使用 `self` 密钥（用于 PeerID 的 ed25519 私钥）作为默认 IPNS 名称。但可以通过 [`ipfs key gen`](https://docs.ipfs.tech/reference/kubo/cli/#ipfs-key-gen) 生成多个密钥，并使用它们来管理多个 IPNS 名称。
 
-#### How IPNS names relate to content paths
+#### IPNS 名称与内容路径的关系
 
-IPNS record can point at an immutable or a mutable path. The meaning behind CID used in a path depends on used namespace:
+IPNS 记录可以指向不可变或可变的路径。路径中使用的 CID 背后的含义取决于使用的命名空间：
 
-- `/ipfs/<cid>` – an [immutable content on IPFS](https://cid.ipfs.tech/#bafybeibml5uieyxa5tufngvg7fgwbkwvlsuntwbxgtskoqynbt7wlchmfm) (since the CID contains a multihash)
-- `/ipns/<cid-of-libp2p-key>` – a mutable, cryptographic [IPNS name](https://cid.ipfs.tech/#k51qzi5uqu5dlvj2baxnqndepeb86cbk3ng7n3i46uzyxzyqj2xjonzllnv0v8) which corresponds to a libp2p public key.
+- `/ipfs/<cid>` – [IPFS 上的不可变内容](https://cid.ipfs.tech/#bafybeibml5uieyxa5tufngvg7fgwbkwvlsuntwbxgtskoqynbt7wlchmfm)（因为 CID 包含多重哈希）
+- `/ipns/<cid-of-libp2p-key>` – 一个可变的、加密的 [IPNS 名称](https://cid.ipfs.tech/#k51qzi5uqu5dlvj2baxnqndepeb86cbk3ng7n3i46uzyxzyqj2xjonzllnv0v8)，与 libp2p 公钥相对应。
 
-The following is a useful mental model for understanding the difference between the two:
+以下是一个有用的思维模型，有助于理解两者之间的区别：
 
 ```mermaid
 graph LR;
-    IPNS-- mutable pointer -->IPFS;
-    IPFS-- immutable pointer -->content;
+    IPNS-- 可变指针 -->IPFS-CID;
+    IPFS-CID-- 不可变指针 -->content;
 ```
 
 ```
@@ -67,9 +67,9 @@ IPFS = immutable *Pointer => content
 IPNS = **Pointer => content
 ```
 
-IPNS names are essentially pointers (IPNS names) to pointers (IPFS CIDs) whereas IPFS CIDs are immutable (because they're derived from the content) pointers to content.
+IPNS 名称本质上是指向指针（IPFS CID）的指针（IPNS 名称），而 IPFS CID 是不可变的（因为它们源自内容）指向内容的指针。
 
-### IPNS names are self-certifying
+### IPNS 名称是自我认证的
 
 IPNS names are self-certifying. This means that an IPNS record contains all the information necessary to certify its authenticity. IPNS achieves this using public and private key pairs:
 
@@ -79,7 +79,7 @@ IPNS names are self-certifying. This means that an IPNS record contains all the 
 
 This self-certifying nature gives IPNS several benefits not present in hierarchical and consensus systems such as DNS, and blockchain identifiers. Notably, IPNS records can come from anywhere, not just a particular service/system, and it is very fast and easy to confirm a record is authentic.
 
-### Common IPNS operations
+### 常见 IPNS 操作
 
 As a user or developer using IPNS for naming, there are three common operations worth understanding:
 
@@ -87,7 +87,7 @@ As a user or developer using IPNS for naming, there are three common operations 
 - **Publishing an IPNS record:** advertising the IPNS record so that other nodes can resolve it. Details depend on the transport.
 - **Resolving an IPNS name:** Resolving an IPNS name to a content path.
 
-### IPNS is transport agnostic
+### IPNS 与传输无关
 
 ```mermaid
 graph TB
@@ -117,7 +117,7 @@ The main implication of this difference is that IPNS operations (publishing and 
 
 > **Note:** This trade-off is best explained by [CAP theorem](https://en.wikipedia.org/wiki/CAP_theorem).
 
-#### IPNS over the DHT
+#### DHT 上的 IPNS
 
 The DHT is the default transport mechanism for IPNS records in many IPFS implementations.
 
@@ -134,7 +134,7 @@ By default, Kubo will republish IPNS records to the DHT based on the [`Ipns.Repu
 
 It's worth noting that publishing and resolving IPNS names using the DHT can be slow. This is because multiple records need to be found to ensure the latest version (record with the highest `sequence`), which involves round trips to multiple nodes.
 
-#### IPNS over PubSub
+#### PubSub 上的 IPNS
 
 IPNS over PubSub uses the [Libp2p PubSub](https://docs.libp2p.io/concepts/publish-subscribe/) to publish records and resolve names amongst **interested peers**.
 
@@ -150,7 +150,7 @@ After the subscription to the topic is established, PubSub usually improves both
 
 It should be noted that there's an upper limit to the number of unique IPNS names you can resolve over PubSub, because for each name, a subscription is created which opens several (by default 6) network connections to mesh members.
 
-##### Publishing IPNS records over PubSub lifecycle
+##### 在 PubSub 生命周期内发布 IPNS 记录
 
 1. Create a record and sign it.
 2. Calculate PubSub topic name from IPNS name.
@@ -163,7 +163,7 @@ Steps 5 and 6 describe from a high level how IPNS record persistence is layered 
 
 > Further details about the IPNS over PubSub protocol can be found in the [IPNS over PubSub Spec](https://github.com/ipfs/specs/blob/main/ipns/IPNS_PUBSUB.md#protocol)
 
-### Tradeoffs between consistency vs. availability
+### 一致性与可用性之间的权衡
 
 The self-certifying nature of IPNS comes with an inherent tradeoff between **consistency** and **availability**.
 
@@ -171,11 +171,11 @@ Consistency means ensuring that users resolve to the latest published IPNS recor
 
 Availability means resolving to a valid IPNS record, at the cost of potentially resolving to an outdated record.
 
-#### IPNS record validity
+#### IPNS 记录有效性
 
 When setting the `validity` (referred to as [`lifetime` by Kubo](https://github.com/ipfs/kubo/blob/master/docs/config.md#ipnsrecordlifetime)) field of an IPNS record, you typically need to choose whether you favor **consistency** (short validity period, e.g. 24 hours) or **availability** (long validity period, e.g. 1 month), due to the inherent trade-off between the two.
 
-#### Practical considerations
+#### 实际考虑
 
 One of the most important things to consider with IPNS names is **how frequently you intend on updating the name**.
 
@@ -184,9 +184,9 @@ Practically, two levers within your control determine where your IPNS name is on
 - **IPNS record validity:** longer validity will veer towards availability. Moreover, longer validity will reduce the dependence on the key holder (which for most purposes is stored on a single machine and rare shared) since the record can continue to persist without requiring the private key holder to sign a new record. Another benefit of a longer validity is that the transport can be delegated to other nodes or services (such as [w3name](https://staging.web3.storage/docs/how-tos/w3name/)), without compromising the private key.
 - **Transport mechanism:** the DHT veers towards consistency while PubSub veers towards availability. However, with Kubo, IPNS names are always published to the DHT, while PubSub is opt-in. For most purposes, enabling PubSub is a net gain unless you hit the upper limit of connections as a result of too many PubSub subscriptions.
 
-## IPNS in practice
+## IPNS 实践
 
-### Resolving IPNS names using IPFS gateways
+### 使用 IPFS 网关解析 IPNS 名称
 
 IPNS names can be resolved by [IPFS gateways](ipfs-gateway.md) in a _trusted_ fashion using both path resolution and subdomain resolution style:
 
@@ -197,14 +197,14 @@ IPNS names can be resolved by [IPFS gateways](ipfs-gateway.md) in a _trusted_ fa
 
 <!-- ### Third-party providing/publishing w3name -->
 
-### Publishing IPNS names
+### 发布 IPNS 名称
 
 See the following guide on [publishing IPNS names with Kubo and Helia](../how-to/publish-ipns.md).
 
-## Alternatives to IPNS
+## IPNS 的替代方案
 
 IPNS is not the only way to create mutable addresses on IPFS. You can also use [DNSLink](dnslink.md), which is currently much faster than IPNS, uses human-readable names, and can also point to IPNS names. Other community members are exploring ways to use blockchains to store common name records.
 
-## Further Resources
+## 更多资源
 
 - [ResNetLab on Tour - Mutable Content](https://research.protocol.ai/tutorials/resnetlab-on-tour/mutable-content/)
