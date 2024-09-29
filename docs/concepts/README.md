@@ -1,5 +1,5 @@
 ---
-title: Concepts
+title: 概念
 description: Get started on understanding the key ingredients in the decentralized web and how IPFS works.
 ---
 

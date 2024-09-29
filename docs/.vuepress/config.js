@@ -9,9 +9,9 @@ const installMenuChildren = [
   ['/install/run-ipfs-inside-docker', 'IPFS Kubo in Docker'],
   ['https://github.com/ipfs/helia','IPFS Helia for JavaScript'],
   ['https://iroh.computer/docs/install/', "IPFS Iroh for Rust"],
-  ['/install/ipfs-desktop', 'IPFS Desktop App'],
-  ['/install/ipfs-companion', 'IPFS Companion Browser Extension'],
-  ['/install/server-infrastructure', 'IPFS Cluster']
+  ['/install/ipfs-desktop', 'IPFS 桌面应用程序'],
+  ['/install/ipfs-companion', 'IPFS Companion 浏览器扩展'],
+  ['/install/server-infrastructure', 'IPFS 集群']
 ]
 
 module.exports = {
@@ -24,9 +24,9 @@ module.exports = {
   head: require('./head'),
   locales: {
     '/': {
-      lang: 'en-US',
-      title: 'IPFS Docs',
-      description: 'IPFS Documentation'
+      lang: 'zh-CN',
+      title: 'IPFS 文档',
+      description: 'IPFS 文档'
     }
   },
   markdown: {
@@ -77,12 +77,12 @@ module.exports = {
         },
         nav: require('./nav/en'),
         nav: [
-          { text: 'Get Started', link: '/install/' },
-          { text: 'Concepts', link: '/concepts/' },
-          { text: 'Guides', link: '/how-to/' },
-          { text: 'Reference', link: '/reference/' },
-          { text: 'Project', link: '/project/' },
-          { text: 'Case Studies',
+          { text: '开始使用', link: '/install/' },
+          { text: '概念', link: '/concepts/' },
+          { text: '指南', link: '/how-to/' },
+          { text: '参考', link: '/reference/' },
+          { text: '项目', link: '/project/' },
+          { text: '案例研究',
             items: [
               {text: 'Arbol', link : '/case-studies/arbol/'},
               {text: 'Audius', link : '/case-studies/audius'},
@@ -96,15 +96,15 @@ module.exports = {
 
         sidebar: {
           '/install/':  [
-            ['/concepts/what-is-ipfs','Basic Concepts'],
+            ['/concepts/what-is-ipfs','基础概念'],
             {
-              title: 'Quickstart',
+              title: '快速开始',
               sidebarDepth: 1,
               collapsable: false,
               children: [
-                ['/quickstart/publish','Publish with IPFS (UI)'],
-                ['/quickstart/publish_cli', 'Publish with IPFS (command line)' ], 
-                ['/quickstart/retrieve','Retrieve with IPFS'],
+                ['/quickstart/publish','发布到IPFS (UI)'],
+                ['/quickstart/publish_cli', '发布到IPFS (command line)' ],
+                ['/quickstart/retrieve','使用IPFS检索'],
               ]
             },
             {
@@ -115,15 +115,15 @@ module.exports = {
             },
           ],
           '/quickstart/':  [
-            ['/concepts/what-is-ipfs','Basic Concepts'],
+            ['/concepts/what-is-ipfs','基础概念'],
             {
-              title: 'Quickstart',
+              title: '快速开始',
               sidebarDepth: 1,
               collapsable: false,
               children: [
-                ['/quickstart/publish','Publish with IPFS (UI)'],
-                ['/quickstart/publish_cli', 'Publish with IPFS (command line)' ],
-                ['/quickstart/retrieve','Retrieve with IPFS'],
+                ['/quickstart/publish','发布到 IPFS (UI)'],
+                ['/quickstart/publish_cli', '发布到 (command line)' ],
+                ['/quickstart/retrieve','使用IPFS检索'],
                 
               ]
             },
@@ -136,7 +136,7 @@ module.exports = {
           ],
           '/concepts/': [
             {
-              title: 'Basics',
+              title: '基础',
               sidebarDepth: 1,
               collapsable: true,
               children: [
@@ -146,7 +146,7 @@ module.exports = {
               ]
             },
             {
-              title: 'Ideas and theory',
+              title: '思想和理论',
               sidebarDepth: 1,
               collapsable: true,
               children: [
@@ -159,7 +159,7 @@ module.exports = {
               ]
             },
             {
-              title: 'Subsystems and components',
+              title: '子系统与组件',
               sidebarDepth: 1,
               collapsable: true,
               children: [
@@ -177,18 +177,18 @@ module.exports = {
               ]
             },
             {
-              title: 'Implementations',
+              title: '实现',
               sidebarDepth: 1,
               collapsable: true,
               children: [
-                ['/concepts/implementations', 'Implementations explained'],
-                ['/concepts/ipfs-implementations', 'List of implementations']
+                ['/concepts/implementations', '实现说明'],
+                ['/concepts/ipfs-implementations', '实现列表']
               ]
             },
             '/concepts/cod',
             '/concepts/comparisons',
             '/concepts/public-utilities',
-            ['/concepts/measuring', 'Measuring the network'],
+            ['/concepts/measuring', '测量网络'],
             '/concepts/faq',
             '/concepts/glossary',
             '/concepts/further-reading/academic-papers'
@@ -196,7 +196,7 @@ module.exports = {
           '/how-to/': [
             '/how-to/desktop-app',
             {
-              title: 'IPFS Kubo Tutorials',
+              title: 'IPFS Kubo 教程',
               sidebarDepth: 1,
               collapsable: true,
               children: [
@@ -209,7 +209,7 @@ module.exports = {
                 '/how-to/ipfs-updater', 
                 [
                   'https://github.com/ipfs-examples/js-ipfs-examples/tree/master/examples/custom-ipfs-repo',
-                  'Customize an IPFS repo'
+                  '自定义IPFS存储库'
                 ],
                 '/how-to/kubo-garbage-collection',
                 '/how-to/troubleshooting',   
@@ -217,7 +217,7 @@ module.exports = {
               ]
             },
             {
-              title: 'Manage files',
+              title: '管理文件',
               sidebarDepth: 1,
               collapsable: true,
               children: [
@@ -231,7 +231,7 @@ module.exports = {
               ]
             },
             {
-              title: 'Work with peers',
+              title: '点工作',
               sidebarDepth: 1,
               collapsable: true,
               children: [
@@ -240,7 +240,7 @@ module.exports = {
               ]
             },
             {
-              title: 'Websites on IPFS',
+              title: 'IPFS上的网站',
               sidebarDepth: 1,
               collapsable: true,
               children: [
@@ -253,7 +253,7 @@ module.exports = {
               ]
             },
             {
-              title: 'IPFS in the browser',
+              title: '浏览器中的IPFS',
               sidebarDepth: 1,
               collapsable: true,
               children: [
@@ -270,7 +270,7 @@ module.exports = {
               ]
             },
             {
-              title: 'IPFS Gateway',
+              title: 'IPFS 网关',
               sidebarDepth: 1,
               collapsable: true,
               children: [
@@ -279,7 +279,7 @@ module.exports = {
               ]
             },
             {
-              title: 'IPFS Companion',
+              title: 'IPFS 伴侣',
               sidebarDepth: 1,
               collapsable: true,
               children: [
@@ -290,7 +290,7 @@ module.exports = {
               ]
             },
             {
-              title: 'IPFS & Blockchain Networks',
+              title: 'IPFS & 区块网络',
               sidebarDepth: 1,
               collapsable: true,
               children: [
@@ -298,7 +298,7 @@ module.exports = {
               ]
             },
             {
-              title: 'Privacy and Encryption',
+              title: '隐私与加密',
               sidebarDepth: 1,
               collapsable: true,
               children: [
@@ -327,7 +327,7 @@ module.exports = {
 
           ],
           '/community/': [
-            ['/community/', 'Join the community'],
+            ['/community/', '加入社区'],
             '/community/contribute/ways-to-contribute',
             {
               title: 'Write the docs',
@@ -376,7 +376,7 @@ module.exports = {
           ],
           '/case-studies/' : [
             {
-              title: 'Case Studies',
+              title: '案例研究',
               collapsable: false,
               children: [
                 ['/case-studies/arbol', 'Arbol'],
@@ -395,7 +395,7 @@ module.exports = {
             '/reference/',
             '/project/',
             {
-              title: 'Case Studies',
+              title: '案例研究',
               collapsable: true,
               children: [
                 ['/case-studies/arbol', 'Arbol'],

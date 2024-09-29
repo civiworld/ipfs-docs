@@ -1,5 +1,5 @@
 ---
-title: Guides
+title: 指南
 description: Hands-on guides to using and developing with IPFS to build decentralized web apps and services.
 ---
 

@@ -1,15 +1,15 @@
 ---
-title: 'Publish a file with IPFS using a pinning service'
-description: 'Learn how to publish content with IPFS by pinning a file to a pinning service.'
+title: '使用固定服务（pinning services）通过 IPFS 发布文件'
+description: '了解如何通过将文件固定到固定服务来使用 IPFS 发布内容。'
 ---
 
-# Publish a file with IPFS
+# 使用 IPFS 发布一个文件
 
 :::warning
-Some steps of this guide are currently outdated due to [changes with web3.storage](https://blog.web3.storage/posts/the-data-layer-is-here-with-the-new-web3-storage).
+由于 [web3.storage 的变化](https://blog.web3.storage/posts/the-data-layer-is-here-with-the-new-web3-storage)，本指南的某些步骤目前已过时。
 :::
 
-In this quickstart guide, you will learn about [pinning services](../concepts/persistence.md#pinning-in-context) and how to use them to publish content-addressed data with IPFS. To learn the process, you will upload the file to a pinning service called [web3.storage](https://web3.storage/). By the end of this guide, you should have a better understanding of how content addressing and CIDs work from a high level.
+在本快速入门指南中，您将了解 [固定服务 pinning services](../concepts/persistence.md#pinning-in-context) 以及如何使用它们通过 IPFS 发布内容寻址数据。要了解该过程，您需要将文件上传到名为 [web3.storage](https://web3.storage/) 的固定服务。在本指南结束时，您应该从高层次更好地了解内容寻址和 CID 的工作原理。
 
 :::callout
 The web3.storage pinning service was chosen purely for demonstration purposes, and is one of many [pinning services](../concepts/persistence.md#pinning-in-context) you can choose from. While each pinning services has different SDKs and APIs, their fundamental role is the same - to store files and make them available to the IPFS network. In fact, one of the main benefits of IPFS is that files can be pinned to multiple pinning services, thereby reducing vendor lock-in.

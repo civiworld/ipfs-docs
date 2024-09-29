@@ -1,5 +1,5 @@
 ---
-title: 'Case study: Arbol'
+title: '案例研究: Arbol'
 description: Explore some helpful use cases, ideas, and examples for the InterPlanetary File System (IPFS).
 ---
 

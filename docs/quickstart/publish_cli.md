@@ -1,5 +1,5 @@
 ---
-title: 'Publish using the command line'
+title: '使用命令发布'
 description: 'Learn how to publish content with IPFS by pinning a file to a pinning service using the command line.'
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: Project
+title: 项目
 description: Learn about the history, roadmap, current status and more for IPFS, the InterPlanetary File System.
 ---
 

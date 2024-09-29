@@ -1,5 +1,5 @@
 ---
-title: Get Started
+title: 开始使用
 description: There are several different ways you can install and interact with IPFS. Find out which one best suits your needs here.
 ---
 

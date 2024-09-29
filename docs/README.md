@@ -1,69 +1,68 @@
 ---
-title: IPFS Documentation
+title: IPFS 文档
 description: The home page for developer documentation for IPFS, the InterPlanetary File System.
 ---
 
-# Welcome to the IPFS docs
+# 欢迎使用 IPFS 文档
 
-The InterPlanetary File System (IPFS) is a set of composable, peer-to-peer protocols for addressing, routing, and transferring [content-addressed](concepts/glossary.md#content-addressing) data in a decentralized file system. Many popular Web3 projects are built on IPFS - see the [ecosystem directory](https://ecosystem.ipfs.tech) for a list of some of these projects.
+星际文件系统 （IPFS） 是一组可组合的点对点协议，用于寻址、路由和传输[内容寻址](concepts/glossary.md#content-addressing)数据。许多流行的 Web3 项目都是基于 IPFS 构建的 - 请参阅[生态系统目录](https://ecosystem.ipfs.tech)，了解其中一些项目的列表。
 
-## Get started
+## 开始使用
 
-You can quickly [store and retrieve data](#store-and-retrieve-data) and [interact with the network via a simple GUI app or a standard browser](#interact-with-the-network). If you'd rather develop applications, learn how to build IPFS-native apps or use standard HTTP in the [Build](#build) section.
+您可以快速[存储和检索数据](#存储和检索数据)并[通过简单的 GUI 应用程序或标准浏览器与网络交互](#与网络交互)。如果您更愿意开发应用程序，请在[构建](#构建)部分中了解如何构建 IPFS 原生应用程序或使用标准 HTTP。
 
 :::callout
-New to IPFS? Start with
-[the 3-page Basic Concepts](./concepts/README.md#learn-the-basics).
+刚开始了解 IPFS？从 [3 页的基本概念](./concepts/README.md#learn-the-basics)开始.
 :::
 
-### Store and retrieve data
+### 存储和检索数据
 
-Quickly store data and retrieve data, no complex applications or programming required:
+快速存储和检索数据，无需复杂的应用程序或编程：
 
-- Publish content to the IPFS network with a pinning service by following this [quickstart guide](./quickstart/publish.md).
-- Fetch data via it's <VueCustomTooltip label="An address used to point to data in IPFS, based on the content itself, as opposed to the location." underlined multiline is-medium>content identifier (CID)</VueCustomTooltip> [using an IPFS gateway](./quickstart/retrieve.md#fetching-the-cid-with-an-ipfs-gateway).
-- For long-term storage, use [Filecoin](https://docs.filecoin.io/), the peer-to-peer network with built-in economic incentives that stores data on IPFS.
+- 按照此[快速入门指南](./quickstart/publish.md)，使用固定服务将内容发布到 IPFS 网络。
+- 通过其 <VueCustomTooltip label="用于指向 IPFS 中的数据的地址，基于内容本身，而不是位置。" underlined multiline is-medium>内容标识符 （CID）</VueCustomTooltip> [使用 IPFS 网关](./quickstart/retrieve.md#fetching-the-cid-with-an-ipfs-gateway).
+- 如需长期储存，请使用 [Filecoin](https://docs.filecoin.io/) 文件，一个具有内置经济激励措施的点对点网络，将数据存储在 IPFS 上。
 
-### Interact with the network 
+### 与网络交互
 
-You can quickly interact the IPFS network using a simple GUI or a standard browser:
+您可以使用简单的 GUI 或标准浏览器快速交互 IPFS 网络：
 
-- For a simple, easy-to-use GUI application that bundles an IPFS node, file manager, peer manager, and content explorer, use [IPFS Desktop](./install/ipfs-desktop.md).
-- Interact with the network using any Brave, Chrome, Edge, Firefox, Opera, and any other Chromium-based web browser using the [IPFS Companion browser extension](./install/ipfs-companion.md).
+- 对于捆绑了 IPFS 节点、文件管理器、对等管理器和内容资源管理器的简单易用的 GUI 应用程序，请使用 [IPFS Desktop](./install/ipfs-desktop.md)。
+- 使用任何 Brave、Chrome、Edge、Firefox、Opera 和任何其他基于 Chromium 的 Web 浏览器与网络交互，使用 [IPFS Companion 浏览器扩展](./install/ipfs-companion.md)。
 
-### Build
+### 构建
 
-You can build apps that leverage IPFS implementations, or use HTTP instead:
+您可以构建利用 IPFS 实现的应用程序，也可以改用 HTTP：
 
-#### Using IPFS
+#### 使用 IPFS
 
-Build an IPFS-native app using one of the many IPFS <VueCustomTooltip label="Software, written in any programming language, with functionality to process and transmit content-addressed data. Some implementations are optimized for specific use cases or devices, or use different subsystems to handle content-addressed data. There are multiple specififactions in IPFS for handling content-addressed data, and not all implementations implement them." underlined multiline is-medium>implementations</VueCustomTooltip> and tools built by and for Web3 users:
+使用众多 IPFS 之一构建 IPFS 原生应用程序<VueCustomTooltip label="用任何编程语言编写的软件，具有处理和传输内容寻址数据的功能。一些实现针对特定用例或设备进行了优化，或使用不同的子系统来处理内容寻址数据。IPFS 中有多种用于处理内容寻址数据的规范，但并非所有实现都实现了这些规范。" underlined multiline is-medium>实现</VueCustomTooltip>以及由 Web3 用户构建并为 Web3 用户构建的工具：
 
-- To develop IPFS applications using Go and/or interact with IPFS from the terminal, use the [IPFS Kubo implementation in Go](./install/command-line.md). 
-- If you'd rather use JavaScript, try the [IPFS Helia implementation in JavaScript](https://github.com/ipfs/helia).
-- Try any of the [many other tools and implementations](./concepts/ipfs-implementations.md), which are written in different languages and tailored to specific needs and use cases.
+- 要使用 Go 开发 IPFS 应用程序和/或从终端与 IPFS 交互，请使用 [IPFS Kubo（GO的实现）](./install/command-line.md)。
+- 如果您更喜欢使用 JavaScript, 请尝试使用 [JavaScript 中的 IPFS Helia 实现](https://github.com/ipfs/helia).
+- 尝试[许多其他工具和实施](./concepts/ipfs-implementations.md)中的任何一种，这些工具和实施都是用不同的语言编写的，并根据特定需求和用例量身定制。
 
-#### Using HTTP
+#### 使用 HTTP
 
-Connect your Web2 application to the IPFS network using standard HTTP:
+使用标准 HTTP 将您的 Web2 应用程序连接到 IPFS 网络：
 
-- Control an IPFS Kubo node via HTTP using the [Kubo RPC API](./reference/kubo/rpc.md), which supports [multiple clients in multiple languages](./reference/kubo-rpc-cli.md).
-- For an implementation and runtime agnostic HTTP interface for retrieving data, use an [IPFS gateway](./reference/http/gateway.md).
+- 使用 [Kubo RPC API](./reference/kubo/rpc.md) 通过 HTTP 控制 IPFS Kubo 节点，该 API 支持[多种语言的多个客户端](./reference/kubo-rpc-cli.md)。
+- 对于用于检索数据的实现和运行时无关的 HTTP 接口，请使用 [IPFS 网关](./reference/http/gateway.md)。
 
-## Learn
+## 学习
 
-- Learn what IPFS is and isn't, the problems it solves, the different subsystems that it is composed of and how each one works in [the Basic Concepts](./concepts/README.md#learn-the-basics).
-- Dive into ideas like hashing, immutability, persistence (and more) that underlie IPFS in [Ideas and theory](./concepts/README.md#ideas-and-theory).
-- Learn more about the subsystems that IPFS is composed of in [Subsystems and components](./concepts/README.md#subsystems-and-components)
-- Get an [overview of IPFS implementations](./concepts/ipfs-implementations.md).
-- [Compare IPFS to other similar systems](./concepts/comparisons.md).
-- Understand the project history, ecosystem status and more in the [Project section](./project/README.md).
-- See how other software systems leverage IPFS in the [Case Studies section](./case-studies/arbol.md).
+- 在[基本概念](./concepts/README.md#learn-the-basics)中了解 IPFS 是什么和不是什么、它解决的问题、它由不同的子系统组成以及每个子系统的工作原理。
+- 深入研究 IPFS 中的哈希、不变性、持久性（等）等概念[思想和理论](./concepts/README.md#ideas-and-theory).
+- 了解有关 IPFS 组成的[子系统和组件](./concepts/README.md#subsystems-and-components)的更多信息。
+- 获取[IPFS 实现概述](./concepts/ipfs-implementations.md)。
+- [将 IPFS 与其他类似系统进行比较](./concepts/comparisons.md)。
+- 在[项目部分](./project/README.md)了解项目历史、生态系统状态等。
+- 在[案例研究部分](./case-studies/arbol.md)了解其他软件系统如何利用IPFS.
 
-## Join the IPFS community
+## 加入IPFS社区 
 
 :::tip
-Are you developing with IPFS implementations and tools, and looking for technical support from IPFS experts? For the fastest possible assistance and resolution of your support needs, see the [guide to getting technical help and support](./community/README.md#get-technical-support-and-help).
+您是否正在使用 IPFS 实现和工具进行开发，并正在寻找 IPFS 专家的技术支持？要以最快的速度获得帮助并解决您的支持需求，请参阅[获取技术帮助和支持指南](./community/README.md#get-technical-support-and-help)。
 :::
 
-IPFS has a bustling community of designers, developers, writers, and activists who are all helping to improve the project. Find out about the events and resources available, and how to get involved in the [Community section](./community/README.md)
+IPFS 拥有一个由设计师、开发人员、作家和活动家组成的熙熙攘攘的社区，他们都在帮助改进该项目。在[社区部分](./community/README.md)了解可用的活动和资源，以及如何参与。
