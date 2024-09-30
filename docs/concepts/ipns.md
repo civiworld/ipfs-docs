@@ -71,21 +71,22 @@ IPNS 名称本质上是指向指针（IPFS CID）的指针（IPNS 名称），�
 
 ### IPNS 名称是自我认证的
 
-IPNS names are self-certifying. This means that an IPNS record contains all the information necessary to certify its authenticity. IPNS achieves this using public and private key pairs:
+IPNS 名称是自我验证的。这意味着 IPNS 记录包含证明其真实性所需的所有信息。IPNS 使用公钥和私钥对来实现这一点：
 
-- Each IPNS name corresponds to a key pair
-- The IPNS name is a CID with a multihash of the public key
-- The IPNS record contains the public key and signature, allowing anyone to verify that the record was signed by the private key holder.
+- 每个 IPNS 名称对应一个密钥对
+- IPNS 名称是具有公钥多重哈希的 CID
+- IPNS 记录包含公钥和签名，允许任何人验证记录是否由私钥持有者签名
 
-This self-certifying nature gives IPNS several benefits not present in hierarchical and consensus systems such as DNS, and blockchain identifiers. Notably, IPNS records can come from anywhere, not just a particular service/system, and it is very fast and easy to confirm a record is authentic.
+这种自我认证的性质为 IPNS 提供了分层和共识系统（如 DNS 和区块链标识符）中不存在的多项优势。值得注意的是，IPNS 记录可以来自任何地方，而不仅仅是特定的服务/系统，并且确认记录是否真实非常快速和容易。
+
 
 ### 常见 IPNS 操作
 
-As a user or developer using IPNS for naming, there are three common operations worth understanding:
+作为使用 IPNS 进行命名的用户或开发者，有三种常见的操作值得了解：
 
-- **Updating/Creating an IPNS record:** refers to the creation of an IPNS record and signing it with a private key.
-- **Publishing an IPNS record:** advertising the IPNS record so that other nodes can resolve it. Details depend on the transport.
-- **Resolving an IPNS name:** Resolving an IPNS name to a content path.
+- **更新/创建 IPNS 记录：** 是指创建 IPNS 记录并使用私钥对其进行签名。
+- **发布 IPNS 记录：** 发布 IPNS 记录，以便其他节点可以解析它。详细信息取决于传输。
+- **解析 IPNS 名称：** 将 IPNS 名称解析为内容路径。
 
 ### IPNS 与传输无关
 
@@ -107,23 +108,23 @@ graph TB
     Publisher-- Cache -->Local-. GET .->Resolver-- Cache -->Local
 ```
 
-The self-certifying nature of IPNS records means that they are not tied to a specific transport protocol. In practice, most IPFS implementations rely on the [**DHT**](dht.md) and [**libp2p PubSub**](https://docs.libp2p.io/concepts/publish-subscribe/) to publish and resolve IPNS records.
+IPNS 记录的自认证性质意味着它们不依赖于特定的传输协议。实际上，大多数 IPFS 实现都依赖于 [**DHT**](dht.md) 和 [**libp2p PubSub**](https://docs.libp2p.io/concepts/publish-subscribe/) 来发布和解析 IPNS 记录。
 
-There are nuanced differences and trade-offs between the **DHT** and **PubSub** to be aware of.
+需要注意的是，**DHT** 和 **PubSub** 之间存在细微的差别和权衡。
 
-The main qualitative difference between the two is that IPNS over the DHT publishes and resolves to a global shared state, whereas IPNS over PubSub uses messaging over topics (where each IPNS name has a unique topic) to publish to and resolve from **interested peers**.
+两者之间的主要差异在于，DHT 上的 IPNS 发布并解析为全局共享状态，而 PubSub 上的 IPNS 使用主题上的消息传递（其中每个 IPNS 名称都有一个唯一的主题）来发布到**感兴趣的同行**并进行解析。
 
-The main implication of this difference is that IPNS operations (publishing and resolving) over the DHT can take longer than over PubSub, while potentially ensuring higher consistency (you resolve to the latest version).
+这种差异的主要含义是，通过 DHT 进行的 IPNS 操作（发布和解析）可能比通过 PubSub 花费更长的时间，但可能确保更高的一致性（你解析到最新版本）。
 
-> **Note:** This trade-off is best explained by [CAP theorem](https://en.wikipedia.org/wiki/CAP_theorem).
+> **注意：** [CAP 定理](https://en.wikipedia.org/wiki/CAP_theorem) 可以最好地解释这种权衡。
 
 #### DHT 上的 IPNS
 
-The DHT is the default transport mechanism for IPNS records in many IPFS implementations.
+DHT 是许多 IPFS 实现中 IPNS 记录的默认传输机制。
 
-Due to the ephemeral nature of the DHT, peers forget records after 24 hours. This applies to any record in the DHT, irrespective of the `validity` (also referred to as `lifetime`) field in the IPNS record.
+由于 DHT 的短暂性，对等点会在 24 小时后忘记记录。这适用于 DHT 中的任何记录，无论 IPNS 记录中的“有效性”（也称为“生命周期”）字段如何。
 
-Therefore, IPNS records need to be regularly (re-)published to the DHT. Moreover, publishing to the DHT at regular intervals ensures that the IPNS name can be resolved even when there's high node churn (nodes coming and going.)
+因此，需要定期将 IPNS 记录（重新）发布到 DHT。此外，定期发布到 DHT 可确保即使在节点频繁变动（节点来来去去）的情况下也能解析 IPNS 名称。
 
 By default, Kubo will republish IPNS records to the DHT based on the [`Ipns.RepublishPeriod`](https://github.com/ipfs/kubo/blob/master/docs/config.md#ipnsrepublishperiod) configuration which defaults to 4 hours. [Republishing](https://github.com/ipfs/go-namesys/blob/1bf7d3d9cbe8f988b232b92288b24d25add85a00/republisher/repub.go#L130-L167) involves two steps:
 
