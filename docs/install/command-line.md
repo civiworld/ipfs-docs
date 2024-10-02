@@ -1,37 +1,37 @@
 ---
 title: Kubo
-description: Using IPFS Kubo through the command-line allows you to do everything that IPFS Desktop can do, but at a more granular level, since you can specify which commands to run. Learn how to install it here.
+description: 通过命令行使用 IPFS Kubo 可以让你执行 IPFS Desktop 可以执行的所有操作，但可以更精细地执行，因为你可以指定要运行的命令。在此处了解如何安装。
 current-ipfs-version: v0.30.0
 ---
 
-# Install IPFS Kubo
+# 安装 IPFS Kubo
 
-This guide describes the available installation processes for IPFS Kubo, a Go-based implementation of the InterPlanetary File System (IPFS) protocol. Kubo was the first implementation of IPFS, and is the most widely used implementation today. Kubo allows you to do everything that IPFS Desktop can do, but at a more granular level, since you can specify which commands to run. Kubo has the following features:
+本指南介绍了 IPFS Kubo 的可用安装过程，IPFS Kubo 是基于 Go 的星际文件系统 (IPFS) 协议实现。Kubo 是 IPFS 的第一个实现，也是当今使用最广泛的实现。Kubo 允许你执行 IPFS Desktop 可以执行的所有操作，但更精细，因为你可以指定要运行哪些命令。Kubo 具有以下特点：
 
-- An IPFS daemon server
-- Extensive command line tooling
-- An HTTP RPC API for controlling the node
-- An HTTP Gateway for serving content to HTTP browsers
-- Binaries for Windows, MacOS, Linux, FreeBSD and OpenBSD
+- IPFS 守护进程服务器
+- 广泛的命令行工具
+- 用于控制节点的 HTTP RPC API
+- 用于向 HTTP 浏览器提供内容的 HTTP 网关
+- 适用于 Windows、MacOS、Linux、FreeBSD 和 OpenBSD 的二进制文件
 
-Installing Kubo in the command line is handy for many use cases, such as building applications and services on top of an IPFS node, or setting up a node without a user interface (which is usually the case with remote servers or virtual machines).  
+在命令行中安装 Kubo 对于许多用例来说都很方便，例如在 IPFS 节点之上构建应用程序和服务，或者设置没有用户界面的节点（远程服务器或虚拟机通常是这种情况）。
 
-To get started, familiarize yourself with the system requirements. Then, determine if you'd like to install Kubo using one of the 5 official binary distributions, or build Kubo from source. Once you've installed Kubo, determine which node to use in the command line. Finally, check out the next steps.
+首先，请熟悉系统要求。然后，确定是否要使用 5 个官方二进制发行版之一安装 Kubo，或从源代码构建 Kubo。安装 Kubo 后，确定要在命令行中使用哪个节点。最后，查看后续步骤。
 
 :::warning
-Building from source is only recommended if you are running Kubo on a system with severe resource constraints, or are contributing to the Kubo project. 
+仅当你在资源严重受限的系统上运行 Kubo 或为 Kubo 项目做出贡献时，才建议从源代码构建。
 :::
 
-## System requirements
+## 系统要求
 
-Kubo runs on most Windows, MacOS, Linux, FreeBSD and OpenBSD systems that meet the following requirements:
+Kubo 可在大多数满足以下要求的 Windows、MacOS、Linux、FreeBSD 和 OpenBSD 系统上运行：
 
-- 6 GiB of memory.
-- 2 CPU cores (kubo is highly parallel).
+- 6 GiB 内存。
+- 2 个 CPU 核心（kubo 高度并行）。
 
-Note the following:
-- The amount of disk space your IPFS installation uses depends on how much data you're sharing. A base installation uses around 12MB of disk space.
-- You can enable automatic garbage collection via [--enable-gc](../reference/kubo/cli.md#ipfs-daemon) and adjust using [default maximum disk storage](https://github.com/ipfs/kubo/blob/v0.30.0/docs/config.md#datastorestoragemax) for data retrieved from other peers.
+请注意以下几点：
+- IPFS 安装使用的磁盘空间量取决于你共享的数据量。基本安装使用大约 12MB 的磁盘空间。
+- 你可以通过 [--enable-gc](../reference/kubo/cli.md#ipfs-daemon) 启用自动垃圾收集，并使用 [默认最大磁盘存储](https://github.com/ipfs/kubo/blob/v0.30.0/docs/config.md#datastorestoragemax) 调整从其他对等点检索的数据。
 
 
 <!-- TODO: hide this footgun until https://github.com/ipfs/kubo/pull/10524 is merged and released in stable kubo 
@@ -47,15 +47,15 @@ This reduces daemon overhead on the system but may degrade content discovery and
 
 -->
 
-## Install official binary distributions
+## 安装官方二进制发行版
 
-This section describes how to download and install the Kubo binary from `dist.ipfs.tech` on Windows, MacOS, Linux, FreeBSD and OpenBSD operating systems. The IPFS team publishes the latest, official prebuilt Kubo binaries on the [dist.ipfs.tech website](https://dist.ipfs.tech#kubo). New IPFS Kubo binary releases are automatically shown on the Kubo page on `dist.ipfs.tech`. 
+本节介绍如何在 Windows、MacOS、Linux、FreeBSD 和 OpenBSD 操作系统上从“dist.ipfs.tech”下载并安装 Kubo 二进制文件。IPFS 团队在 [dist.ipfs.tech 网站](https://dist.ipfs.tech#kubo) 上发布了最新的官方预构建 Kubo 二进制文件。新的 IPFS Kubo 二进制版本会自动显示在“dist.ipfs.tech”上的 Kubo 页面上。
 
 :::callout
-If you are unable to access [dist.ipfs.tech](https://dist.ipfs.tech#kubo), you can also download Kubo (go-ipfs) from the project's GitHub [releases](https://github.com/ipfs/kubo/releases/latest) page or `/ipns/dist.ipfs.tech` at the [dweb.link](https://dweb.link/ipns/dist.ipfs.tech#kubo) gateway.
+如果你无法访问 [dist.ipfs.tech](https://dist.ipfs.tech#kubo)，你也可以从项目的 GitHub [releases](https://github.com/ipfs/kubo/releases/latest) 页面或 [dweb.link](https://dweb.link/ipns/dist.ipfs.tech#kubo) 网关上的 `/ipns/dist.ipfs.tech` 下载 Kubo (go-ipfs)。
 :::
 
-Binaries are available for the following operating systems:
+二进制文件适用于以下操作系统：
 
 | OS      | 32-bit | 64-bit | ARM | ARM-64 |
 |---------|--------|--------|-----|--------|
@@ -65,7 +65,7 @@ Binaries are available for the following operating systems:
 | OpenBSD | Yes    | Yes    | Yes | No     |
 | Windows | Yes    | Yes    | No  | No     |
 
-For installation instructions for your operating system, select the appropriate tab.
+有关你的操作系统的安装说明，请选择适当的选项卡。
 
 :::: tabs
 
@@ -73,25 +73,25 @@ For installation instructions for your operating system, select the appropriate 
 
 ### Windows
 
-1. Download the Windows binary from [`dist.ipfs.tech`](https://dist.ipfs.tech/#kubo).
+1. 从 [`dist.ipfs.tech`](https://dist.ipfs.tech/#kubo) 下载 Windows 二进制文件。
 
    ```powershell
    wget https://dist.ipfs.tech/kubo/v0.30.0/kubo_v0.30.0_windows-amd64.zip -Outfile kubo_v0.30.0.zip
    ```
 
-1. Unzip the file to a sensible location, such as `~\Apps\kubo_v0.30.0`.
+1. 将文件解压到合理位置，例如`~\Apps\kubo_v0.30.0`。
 
    ```powershell
    Expand-Archive -Path kubo_v0.30.0.zip -DestinationPath ~\Apps\kubo_v0.30.0
    ```
 
-1. Move into the `kubo_v0.30.0` folder
+2. 进入`kubo_v0.30.0`文件夹
 
    ```powershell
    cd ~\Apps\kubo_v0.30.0\kubo
    ```
 
-1. Check that the `ipfs.exe` works:
+3. 检查`ipfs.exe`是否正常工作：
 
    ```powershell
    .\ipfs.exe --version
@@ -99,45 +99,45 @@ For installation instructions for your operating system, select the appropriate 
    > ipfs version 0.30.0
    ```
 
-   At this point, Kubo is usable. However, it's strongly recommended that you first add `ipfs.exe` to your `PATH` using the following steps:
+   此时，Kubo 即可使用。但是，强烈建议你首先按照以下步骤将`ipfs.exe`添加到`PATH`中：
 
-1. Save the current working directory into a temporary variable:
+1. 将当前工作目录保存到临时变量中：
 
    ```powershell
    $GO_IPFS_LOCATION = pwd
    ```
 
-1. Create a PowerShell profile:
+1. 创建 PowerShell 配置文件：
 
    ```powershell
    if (!(Test-Path -Path $PROFILE)) { New-Item -ItemType File -Path $PROFILE -Force }
    ```
 
-   This command first checks to see if you have a profile set. If you do, it leaves it there and doesn't create a new one. You can view the contents of your profile by opening it in an editor, such as Notepad:
+   此命令首先检查你是否已设置配置文件。如果已设置，则保留配置文件，不会创建新配置文件。你可以在编辑器（如记事本）中打开配置文件来查看其内容：
 
    ```powershell
    notepad $PROFILE
    ```
 
-1. Add the location of your Kubo daemon and add it to PowerShell's `PATH` by truncating it to the end of your PowerShell profile:
+1. 添加你的 Kubo 守护程序的位置，并通过将其截断至 PowerShell 配置文件的末尾将其添加到 PowerShell 的`PATH`中：
 
    ```powershell
    Add-Content $PROFILE "`n[System.Environment]::SetEnvironmentVariable('PATH',`$Env:PATH+';;$GO_IPFS_LOCATION')"
    ```
 
-1. Load your `$PROFILE`:
+1. 加载你的 `$PROFILE`：
 
    ```powershell
    & $profile   
    ```
 
-1. Navigate to your home folder
+1. 导航到你的主文件夹
 
    ```powershell
    cd ~
    ```
 
-1. Test that Kubo installed correctly:
+1. 测试 Kubo 是否正确安装：
 
    ```powershell
    ipfs --version
@@ -153,21 +153,21 @@ For installation instructions for your operating system, select the appropriate 
 
 > The `brew` installation method supports both Intel and Apple Silicon hardware. If you prefer a manual installation, `darwin-amd64` (Intel) and `darwin-arm64` (Apple Silicon) artifacts available [here](https://dist.ipfs.tech/kubo/v0.21.0/).
 
-1. Navigate to a terminal.
+1. 打开终端。
 
-1. Use `brew` to install Kubo:
+1. 使用 `brew` 安装 Kubo：
 
    ```shell
    brew install ipfs
    ```
 
-1. Confirm your Kubo installation:
+1. 确认你的 Kubo 安装：
 
    ```bash
    ipfs --version
    ```
 
-   If Kubo is installed, the version number displays. For example:
+   如果安装了 Kubo，则会显示版本号。例如：
 
    ```bash
    > ipfs version 0.30.0
@@ -178,13 +178,13 @@ For installation instructions for your operating system, select the appropriate 
 
 ### Linux
 
-1. Download the Linux binary from [`dist.ipfs.tech`](https://dist.ipfs.tech/#kubo).
+1. 从 [`dist.ipfs.tech`](https://dist.ipfs.tech/#kubo) 下载 Linux 二进制文件。
 
    ```bash
    wget https://dist.ipfs.tech/kubo/v0.30.0/kubo_v0.30.0_linux-amd64.tar.gz
    ```
 
-1. Unzip the file:
+1. 解压缩文件：
 
    ```bash
    tar -xvzf kubo_v0.30.0_linux-amd64.tar.gz
@@ -197,13 +197,13 @@ For installation instructions for your operating system, select the appropriate 
    > x kubo/README.md
    ```
 
-1. Move into the `kubo` folder:
+1. 进入`kubo`文件夹：
 
    ```bash
    cd kubo
    ```
 
-1. Run the install script
+1. 运行安装脚本
 
    ```bash
    sudo bash install.sh
@@ -211,7 +211,7 @@ For installation instructions for your operating system, select the appropriate 
    > Moved ./ipfs to /usr/local/bin
    ```
 
-1. Test that Kubo has installed correctly:
+1. 测试 Kubo 是否已正确安装：
 
    ```bash
    ipfs --version
@@ -225,13 +225,13 @@ For installation instructions for your operating system, select the appropriate 
 
 ### FreeBSD
 
-1. Download the FreeBSD binary from [`dist.ipfs.tech`](https://dist.ipfs.tech/#kubo).
+1. 从 [`dist.ipfs.tech`](https://dist.ipfs.tech/#kubo) 下载 FreeBSD 二进制文件。
 
    ```bash
    wget https://dist.ipfs.tech/kubo/v0.30.0/kubo_v0.30.0_freebsd-amd64.tar.gz
    ```
 
-1. Unzip the file:
+1. 解压缩文件：
 
    ```bash
    tar -xvzf kubo_v0.30.0_freebsd-amd64.tar.gz
@@ -244,13 +244,13 @@ For installation instructions for your operating system, select the appropriate 
    > x kubo/README.md
    ```
 
-1. Move into the `kubo` folder:
+1. 进入`kubo`文件夹：
 
    ```bash
    cd kubo
    ```
 
-1. Run the install script:
+1. 运行安装脚本：
 
    ```bash
    doas bash install.sh
@@ -258,7 +258,7 @@ For installation instructions for your operating system, select the appropriate 
    > Moved ./ipfs to /usr/local/bin
    ```
 
-1. Test that Kubo has installed correctly:
+1. 测试 Kubo 是否已正确安装：
 
    ```bash
    ipfs --version
@@ -272,13 +272,13 @@ For installation instructions for your operating system, select the appropriate 
 
 ### OpenBSD
 
-1. Download the OpenBSD binary from [`dist.ipfs.tech`](https://dist.ipfs.tech/#kubo).
+1. 从 [`dist.ipfs.tech`](https://dist.ipfs.tech/#kubo) 下载 OpenBSD 二进制文件。
 
    ```bash
    wget https://dist.ipfs.tech/kubo/v0.30.0/kubo_v0.30.0_openbsd-amd64.tar.gz
    ```
 
-1. Unzip the file:
+1. 解压缩文件：
 
    ```bash
    tar -xvzf kubo_v0.30.0_openbsd-amd64.tar.gz
@@ -291,13 +291,13 @@ For installation instructions for your operating system, select the appropriate 
    > x kubo/README.md
    ```
 
-1. Move into the `kubo` folder:
+1. 进入`kubo`文件夹：
 
    ```bash
    cd kubo
    ```
 
-1. Run the install script:
+1. 运行安装脚本：
 
    ```bash
    doas bash install.sh
@@ -305,7 +305,7 @@ For installation instructions for your operating system, select the appropriate 
    > Moved ./ipfs to /usr/local/bin
    ```
 
-1. Test that Kubo has installed correctly:
+1. 测试 Kubo 是否已正确安装：
 
    ```bash
    ipfs --version
@@ -318,41 +318,39 @@ For installation instructions for your operating system, select the appropriate 
 ::::
 
 
+## 从源代码构建 Kubo
 
+有关如何从源代码手动下载、编译和构建 Kubo 的最新说明，请参阅 Kubo 存储库中的 [从源代码构建](https://github.com/ipfs/kubo/blob/v0.30.0/README.md#build-from-source) 部分。
 
-## Build Kubo from source
+## 使用命令行确定要使用的节点
 
-For the current instructions on how to manually download, compile and build Kubo from source, see the [Build from Source](https://github.com/ipfs/kubo/blob/v0.30.0/README.md#build-from-source) section in the Kubo repository.
+命令行可以检测并使用任何正在运行的节点，除非将其配置为使用外部二进制文件。以下是用于本地守护程序或远程客户端的节点：
 
-## Determining which node to use with the command line
+### 本地守护进程
 
-The command line can detect and use any node that's running, unless it's configured to use an external binary file. Here's which node to use for the local daemon or a remote client:
+本地守护进程在 CLI 中通过命令 `ipfs daemon` 自动启动。它会创建一个带有 [RPC API](../reference/kubo/rpc.md#http-rpc-api-reference) 地址的 `$IPFS_PATH/api` 文件。
 
-### Local daemon
+### 远程客户端
 
-The local daemon process is automatically started in the CLI with the command `ipfs daemon`. It creates an `$IPFS_PATH/api` file with an [RPC API](../reference/kubo/rpc.md#http-rpc-api-reference) address.
+你可以独立安装独立的 IPFS CLI 客户端，并使用它来与 IPFS Desktop 节点或 Brave 节点通信。使用 [RPC API](../reference/kubo/rpc.md#http-rpc-api-reference) 与 `ipfs` 守护进程通信。
 
-### Remote client
+当 IPFS 命令不带参数执行时，CLI 客户端会检查 `$IPFS_PATH/api` 文件是否存在并连接到其中列出的地址。
 
-You can install the standalone IPFS CLI client independently and use it to talk to an IPFS Desktop node or a Brave node. Use the [RPC API](../reference/kubo/rpc.md#http-rpc-api-reference) to talk to the `ipfs` daemon.
+- 如果 `$IPFS_PATH` 位于默认位置（例如，Linux 上的 `~/.ipfs`），则它会自动运行，并且 IPFS CLI 客户端无需任何额外配置即可与本地运行的 `ipfs` 守护进程通信。
 
-When an IPFS command executes without parameters, the CLI client checks whether the `$IPFS_PATH/api` file exists and connects to the address listed there.
+- 如果 `$IPFS_PATH` 不在默认位置，请使用 `--api <rpc-api-addr>` 命令行参数。或者，你可以将环境变量设置为 `IPFS_PATH`。`IPFS_PATH` 将指向一个目录，其中 `$IPFS_PATH/api` 文件指向现有 `ipfs` 守护进程实例的 Kubo RPC。
 
-- If an `$IPFS_PATH` is in the default location (for example, `~/.ipfs` on Linux), then it works automatically and the IPFS CLI client talks to the locally running `ipfs` daemon without any extra configuration.
+#### 最常见的例子
 
-- If an `$IPFS_PATH` isn't in the default location, use the `--api <rpc-api-addr>` command-line argument. Alternatively, you can set the environment variable to `IPFS_PATH`. `IPFS_PATH` will point to a directory with the `$IPFS_PATH/api` file pointing at the Kubo RPC of the existing `ipfs` daemon instance.
+如果你是 IPFS Desktop 用户，你可以安装 CLI 工具，然后会自动获取 `.ipfs/api` 文件。
 
-#### Most common examples
+如果你没有运行 IPFS Desktop，请在 CLI 中使用 `ipfs --api /ip4/127.0.0.1/tcp/<port> id` 指定自定义端口。
 
-If you are an IPFS Desktop user, you can install CLI tools and an `.ipfs/api` file is automatically picked up.
+例如，Brave RPC API 在端口 45001 上运行，因此 CLI 可以使用 `ipfs --api /ip4/127.0.0.1/tcp/45001 id` 与 Brave 守护进程通信。你可以使用 `mkdir -p ~/.ipfs && echo "/ip4/<ip>/tcp/<rpc-port>" > ~/.ipfs/api` 来避免每次都传递 `--api`。
 
-If you're not running IPFS Desktop, specify a custom port with `ipfs --api /ip4/127.0.0.1/tcp/<port> id` in the CLI.
+## 下一步
 
-For example, Brave RPC API runs on port 45001, so the CLI can talk to the Brave daemon using `ipfs --api /ip4/127.0.0.1/tcp/45001 id`. You can use `mkdir -p ~/.ipfs && echo "/ip4/<ip>/tcp/<rpc-port>" > ~/.ipfs/api` to avoid passing `--api` every time.
+现在你已经安装了 IPFS Kubo：
 
-## Next steps
-
-Now that you've installed IPFS Kubo:
-
-- Check out the [IPFS Kubo Tutorial in Guides](../how-to/command-line-quick-start.md), which will guide you through taking a Kubo node online and interacting with the network.
-- Learn how to quickly install, uninstall, upgrade and downgrade Kubo using [ipfs-update](../how-to/ipfs-updater.md).
+- 查看 [指南中的 IPFS Kubo 教程](../how-to/command-line-quick-start.md)，它将指导你将 Kubo 节点联机并与网络交互。
+- 了解如何使用 [ipfs-update](../how-to/ipfs-updater.md) 快速安装、卸载、升级和降级 Kubo。

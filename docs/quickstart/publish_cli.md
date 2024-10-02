@@ -1,123 +1,121 @@
 ---
 title: '使用命令发布'
-description: 'Learn how to publish content with IPFS by pinning a file to a pinning service using the command line.'
+description: '了解如何通过使用命令行将文件Pin到Pinning Services来使用 IPFS 发布内容。'
 ---
 
-# Publish a file with IPFS using the command line
+# 使用命令行通过 IPFS 发布文件
 
 :::warning
-Some steps of this guide are currently outdated due to [changes with web3.storage](https://blog.web3.storage/posts/the-data-layer-is-here-with-the-new-web3-storage).
+由于 [web3.storage 的变化](https://blog.web3.storage/posts/the-data-layer-is-here-with-the-new-web3-storage)，本指南的某些步骤目前已过时。
 :::
 
-Similar to the [Publish a file with IPFS](./publish.md) quickstart, this guide will teach you about [pinning services](../concepts/persistence.md#pinning-in-context) and how to use them to publish content-addressed data with IPFS. However, instead of using the [Web3 UI used in the related guide](./publish.md#upload-and-pin-a-file) , you will upload the file to [web3.storage](https://web3.storage/) using the [w3 command line interface](https://github.com/web3-storage/w3cli). By the end of this guide, you should have a better understanding of how content addressing and CIDs work from a high level, as well as how to use the w3 command line interface to publish data to IPFS.
+与 [使用 IPFS 发布文件](./publish.md) 快速入门类似，本指南将向你介绍 [Pinning Services](../concepts/persistence.md#pinning-in-context) 以及如何使用它们通过 IPFS 发布内容寻址数据。但是，你不会使用 [相关指南中使用的 Web3 UI](./publish.md#upload-and-pin-a-file) ，而是使用 [w3 命令行界面](https://github.com/web3-storage/w3cli) 将文件上传到 [web3.storage](https://web3.storage/)。在本指南结束时，你应该从高层次更好地了解内容寻址和 CID 的工作原理，以及如何使用 w3 命令行界面将数据发布到 IPFS。
+:::callout
+web3.storage Pinning Services纯粹是出于演示目的而选择的，它是你可以选择的众多 [Pinning Services](../concepts/persistence.md#pinning-in-context) 之一。虽然每个Pinning Services都有不同的 SDK 和 API，但它们的基本作用是相同的 - 存储文件并使其可用于 IPFS 网络。事实上，IPFS 的主要优势之一是可以将文件Pin到多个Pinning Services，从而减少供应商锁定。
+:::
+
+## 内容 <!-- omit from toc -->
+
+- [概览](#overview)
+- [Pinning Services](#pinning-services)
+- [先决条件](#prerequisites)
+- [上传和固定文件](#uploading-and-pinning-a-file)
+- [CID 说明](#cids-explained)
+- [使用网关检索](#retrieving-with-a-gateway)
+- [总结和后续步骤](#summary-and-next-steps)
+
+## 概览
+
+_固定_ 是指确保特定内容可通过 IPFS 检索的过程。换句话说，固定相当于将文件存储在连接到互联网的计算机或服务器上，从而使其可供 IPFS 网络的其余部分使用。
+
+固定可以在各个级别进行，从单个文件到由 CID 寻址的整个目录。你还可以将 CID Pin到多个 IPFS 节点，以增加网络上文件的冗余度和弹性。
+
+## Pinning Services
+
+[Pinning Services](../concepts/persistence.md#pinning-services) 类似于托管服务，因为它们为你运行 IPFS 节点并确保你的文件可用于 IPFS 网络。
 
 :::callout
-The web3.storage pinning service was chosen purely for demonstration purposes, and is one of many [pinning services](../concepts/persistence.md#pinning-in-context) you can choose from. While each pinning services has different SDKs and APIs, their fundamental role is the same - to store files and make them available to the IPFS network. In fact, one of the main benefits of IPFS is that files can be pinned to multiple pinning services, thereby reducing vendor lock-in.
+默认情况下，Pin到 IPFS 网络的数据是公开的，任何人都可以检索。避免发布私人数据或在发布前对其进行充分加密。
 :::
 
-## Contents <!-- omit from toc -->
+## 先决条件
 
-- [Overview](#overview)
-- [Pinning services](#pinning-services)
-- [Prerequisites](#prerequisites)
-- [Uploading and pinning a file](#uploading-and-pinning-a-file)
-- [CIDs explained](#cids-explained)
-- [Retrieving with a gateway](#retrieving-with-a-gateway)
-- [Summary and next steps](#summary-and-next-steps)
+- 类似 unix 的终端。
+- 在终端环境中安装了 Node.js。
+- 下载并保存在计算机上的 [以下图片](../quickstart/images/welcome-to-IPFS.jpg)：
 
-## Overview
+![图片](../quickstart/images/welcome-to-IPFS.jpg)
 
-_Pinning_ refers to the process of ensuring that a particular piece of content is retrievable with IPFS. In other words, pinning is equivalent to storing a file on a computer or server that is connected to the internet, thereby making it available to the rest of the IPFS network.
+## 安装并注册到 w3
 
-Pinning can be done at various levels, from individual files to entire directories that are addressed by a CID. You can also pin CIDs to multiple IPFS nodes to increase the redundancy and resilience of the file on the network.
+1. 安装 [w3 命令行界面](https://github.com/web3-storage/w3cli)。
 
-## Pinning services
+```shell
+npm install -g @web3-storage/w3cli
 
-[Pinning services](../concepts/persistence.md#pinning-services) are similar to hosting services, in that they run an IPFS node for you and ensure that your files are available to the IPFS network.
+1. 授权 w3 工具代表与你的电子邮件地址 `<your@email.com>` 关联的帐户行事：
 
-:::callout
-Data pinned to the IPFS network is public by default and retrievable by anyone. Avoid publishing private data or adequately encrypt it before publishing.
-:::
+```shell
+w3 login <your@email.com>
 
-## Prerequisites
+## 上传并固定文件
 
-- A unix-like terminal.
-- Node.js installed in the terminal environment.
-- The [following image](../quickstart/images/welcome-to-IPFS.jpg), downloaded and saved on your computer:
+1. 为你的文件创建一个空间。
 
-![image](../quickstart/images/welcome-to-IPFS.jpg)
+```shell
+w3 space create 图片
 
-## Install and register to w3
+1. 上传你的文件。
 
-1. Install the [w3 command line interface](https://github.com/web3-storage/w3cli).
+```shell
+w3 up welcome-to-IPFS.jpg
+```
 
-   ```shell
-   npm install -g @web3-storage/w3cli
+恭喜，你已成功使用 w3 cli 将文件**固定**到 IPFS！🎉
 
-1. Authorize the w3 tool to act on behalf of the account associated with your email address `<your@email.com>`:
+让我们通过查看 CID 来解开刚刚发生的事情。
+## CID 解释
 
-   ```shell
-   w3 login <your@email.com>
+在 IPFS 中，每个文件和目录都用内容标识符 ([CID](../concepts/content-addressing.md)) 进行标识。CID 用作文件的**永久地址**，任何人都可以使用它来在 IPFS 网络上找到它。
 
-## Upload and pin a file
+当文件首次添加到 IPFS 节点时（如本指南中使用的图像），它首先转换为内容可寻址表示，其中文件被拆分成较小的块（如果大于 ~1MB），这些块链接在一起并进行哈希处理以生成 CID。
 
-1. Create a space for your files.
+在本指南中，上传图像的 CID 为：
 
-   ```shell
-    w3 space create Pictures
-
-1. Upload your file.
-
-   ```shell
-   w3 up welcome-to-IPFS.jpg
-   ```
-
-Congratulations, you have successfully **pinned** a file to IPFS using the w3 cli! 🎉
-
-Let's unpack what just happened, by looking at CIDs.
-
-## CIDs explained
-
-In IPFS, every file and directory is identified with a Content Identifier ([CID](../concepts/content-addressing.md)). The CID serves as the **permanent address** of the file and can be used by anyone to find it on the IPFS network.
-
-When a file is first added to an IPFS node (like the image used in this guide), it's first transformed into a content-addressable representation in which the file is split into smaller chunks (if above ~1MB) which are linked together and hashed to produce the CID.
-
-In this guide, the CID for the uploaded image is:
-
-```plaintext
+```纯文本
 bafybeicn7i3soqdgr7dwnrwytgq4zxy7a5jpkizrvhm5mv6bgjd32wm3q4
 ```
 
-You can now share the CID with anyone and they can fetch the file using IPFS.
+你现在可以与任何人共享 CID，他们可以使用 IPFS 获取文件。
 
-To dive deeper into the anatomy of the CID, check out the [CID inspector](https://cid.ipfs.tech/#bafybeicn7i3soqdgr7dwnrwytgq4zxy7a5jpkizrvhm5mv6bgjd32wm3q4).
+要深入了解 CID 的结构，请查看 [CID 检查器](https://cid.ipfs.tech/#bafybeicn7i3soqdgr7dwnrwytgq4zxy7a5jpkizrvhm5mv6bgjd32wm3q4)。
 
 :::callout
-The transformation into a content-addressable representation is a local operation that doesn't require any network connectivity. With web3.storage, this transformation happens client-side (in the browser).
+转换为内容可寻址表示是一种本地操作，不需要任何网络连接。使用 web3.storage，此转换发生在客户端（在浏览器中）。
 :::
 
-## Retrieving with a gateway
+## 使用网关检索
 
-Now that your file is pinned to a pinning service, you will fetch it using an IPFS gateway. An [**IPFS Gateway**](../concepts/ipfs-gateway.md) is an HTTP interface that serves as a bridge to the IPFS network. In other words, it allows you to fetch CIDs from IPFS using HTTP.
+现在你的文件已Pin到Pinning Services，你将使用 IPFS 网关获取它。[**IPFS 网关**](../concepts/ipfs-gateway.md) 是一个 HTTP 接口，可作为 IPFS 网络的桥梁。换句话说，它允许你使用 HTTP 从 IPFS 获取 CID。
 
-Pinning services typically offer an IPFS gateway as a way to easily retrieve your CIDs. For example, Web3.storage operates the [w3s.link](https://w3s.link) gateway, from which you can retrieve the uploaded CID.
+Pinning Services通常提供 IPFS 网关，以便轻松检索你的 CID。例如，Web3.storage 运营 [w3s.link](https://w3s.link) 网关，你可以从中检索已上传的 CID。
 
-To retrieve the CID, open the following URL:
+要检索 CID，请打开以下 URL：
 [bafybeicn7i3soqdgr7dwnrwytgq4zxy7a5jpkizrvhm5mv6bgjd32wm3q4.ipfs.w3s.link](https://bafybeicn7i3soqdgr7dwnrwytgq4zxy7a5jpkizrvhm5mv6bgjd32wm3q4.ipfs.w3s.link/)
 
 :::callout
-When pinning a file to IPFS, the filename is not stored by default. To ensure the filename is retained, it's common to wrap the file in a directory. In such instances, both the file and the directory will have unique CIDs. Web3.storage wraps files in a directory by default, which is why you see a directory listing with the file `welcome-to-IPFS.jpg` followed by a shorthand CID: `bafk…beom` of the file.
+将文件Pin到 IPFS 时，默认情况下不会存储文件名。为了确保保留文件名，通常将文件包装在目录中。在这种情况下，文件和目录都将具有唯一的 CID。 Web3.storage 默认将文件包装在目录中，这就是为什么你会看到一个目录列表，其中文件“welcome-to-IPFS.jpg”后跟该文件的简写 CID：“bafk…beom”。
 :::
 
-## Summary and next steps
+## 摘要和后续步骤
 
-In this quickstart guide, you learned about [pinning services](../concepts/persistence.md#pinning-in-context), and how to use them to publish content-addressed data with IPFS. You also learned how CIDs address files and directories in IPFS by uploading a file to a pinning service called [web3.storage](https://web3.storage/).
+在本快速入门指南中，你了解了 [Pinning Services](../concepts/persistence.md#pinning-in-context)，以及如何使用它们通过 IPFS 发布内容寻址数据。你还了解了 CID 如何通过将文件上传到名为 [web3.storage](https://web3.storage/) 的Pinning Services来寻址 IPFS 中的文件和目录。
 
-Pinning services provide a convenient alternative to running IPFS nodes and infrastructure. However, the two are not mutually exclusive; you can combine a pinning service with an IPFS node on your computer to increase the resilience of your CIDs.
+Pinning Services为运行 IPFS 节点和基础设施提供了一种方便的替代方案。但是，这两者并不相互排斥；你可以将Pinning Services与计算机上的 IPFS 节点相结合，以提高 CID 的弹性。
 
-Possible next steps include:
+可能的后续步骤包括：
 
-- Check out [the lifecycle of data in IPFS](../concepts/lifecycle.md) to learn more about how publishing by pinning fits into the full lifecycle of data in IPFS.
-- Try fetching the pinned file by following the [retrieval quickstart](./retrieve.md).
-- If you prefer to upload a file programmatically with JavaScript or Go, check out the [Web3.storage docs](https://web3.storage/docs/how-tos/store/).
-- Alternatively, try out [Filebase](https://filebase.com/), a pinning service that offers an [AWS S3-compatible API for pinning](https://docs.filebase.com/getting-started/s3-api-getting-started-guide), so you can use any S3-compatible SDK, e.g. [aws-sdk](https://www.npmjs.com/package/aws-sdk), and [many](https://github.com/s3tools/s3cmd) more.
+- 查看 [IPFS 中的数据生命周期](../concepts/lifecycle.md)，详细了解通过固定发布如何融入 IPFS 中数据的完整生命周期。
+- 尝试按照 [检索快速入门](./retrieve.md) 获取固定文件。
+- 如果你希望使用 JavaScript 或 Go 以编程方式上传文件，请查看 [Web3.storage 文档](https://web3.storage/docs/how-tos/store/)。
+- 或者，尝试 [Filebase](https://filebase.com/)，这是一项Pinning Services，提供 [与 AWS S3 兼容的固定 API](https://docs.filebase.com/getting-started/s3-api-getting-started-guide)，因此你可以使用任何与 S3 兼容的 SDK，例如[aws-sdk](https://www.npmjs.com/package/aws-sdk)，以及[许多](https://github.com/s3tools/s3cmd)其他工具。

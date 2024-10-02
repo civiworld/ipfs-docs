@@ -1,85 +1,85 @@
 ---
-title: Install IPFS Kubo inside Docker
-description: You can run IPFS inside Docker to simplify your deployment processes, and horizontally scale your IPFS infrastructure.
+title：在 Docker 中安装 IPFS Kubo
+description：你可以在 Docker 中运行 IPFS 以简化部署流程，并水平扩展 IPFS 基础设施。
 ---
 
-# Install IPFS Kubo inside Docker
+# 在 Docker 中安装 IPFS Kubo
 
-You can run Kubo IPFS inside Docker to simplify your deployment processes, as well as horizontally scale your IPFS infrastructure.
+你可以在 Docker 中运行 Kubo IPFS 以简化部署流程，并水平扩展 IPFS 基础设施。
 
-## Set up
+## 设置
 
-1. Grab the IPFS docker image hosted at [hub.docker.com/r/ipfs/kubo](https://hub.docker.com/r/ipfs/kubo/).
-1. To make files visible inside the container, you need to mount a host directory with the `-v` option to Docker. Choose a directory that you want to use to import and export files from IPFS. You should also choose a directory to store IPFS files that will persist when you restart the container.
+1. 获取托管在 [hub.docker.com/r/ipfs/kubo](https://hub.docker.com/r/ipfs/kubo/) 的 IPFS docker 镜像。
+1. 要使文件在容器内可见，你需要使用 `-v` 选项将主机目录挂载到 Docker。选择要用于从 IPFS 导入和导出文件的目录。你还应该选择一个目录来存储 IPFS 文件，这些文件将在重新启动容器时保留。
 
-    ```shell
-    export ipfs_staging=</absolute/path/to/somewhere/>
-    export ipfs_data=</absolute/path/to/somewhere_else/>
-    ```
+```shell
+export ipfs_staging=</absolute/path/to/somewhere/>
+export ipfs_data=</absolute/path/to/somewhere_else/>
+```
 
-1. Start a container running ipfs and expose ports `4001` (P2P TCP/QUIC transports), `5001` (RPC API) and `8080` (Gateway):
+1. 启动运行 ipfs 的容器并公开端口 `4001` (P2P TCP/QUIC 传输)、`5001` (RPC API) 和 `8080` (网关)：
 
-    ```shell
-    docker run -d --name ipfs_host -v $ipfs_staging:/export -v $ipfs_data:/data/ipfs -p 4001:4001 -p 4001:4001/udp -p 127.0.0.1:8080:8080 -p 127.0.0.1:5001:5001 ipfs/kubo:latest
-    ```
+```shell
+docker run -d --name ipfs_host -v $ipfs_staging:/export -v $ipfs_data:/data/ipfs -p 4001:4001 -p 4001:4001/udp -p 127.0.0.1:8080:8080 -p 127.0.0.1:5001:5001 ipfs/kubo:latest
+```
 
-    ::: danger NEVER EXPOSE THE RPC API TO THE PUBLIC INTERNET
+::: danger 切勿将 RPC API 暴露给公共互联网
 
-    The API port provides admin-level access to your IPFS node.  See [RPC API docs](../reference/kubo/rpc.md) for more information.
+API 端口提供对你的 IPFS 节点的管理员级访问权限。有关更多信息，请参阅 [RPC API 文档](../reference/kubo/rpc.md)。
 
-    :::
+:::
 
-1. Watch the ipfs log:
+1. 查看 ipfs 日志：
 
-    ```shell
-    docker logs -f ipfs_host
-    ```
+```shell
+docker logs -f ipfs_host
+```
 
-1. Wait for IPFS to start:
+1. 等待 IPFS 启动：
 
-    ```shell
-    RPC API server listening on /ip4/0.0.0.0/tcp/5001
-    WebUI: http://0.0.0.0:5001/webui
-    Gateway server listening on /ip4/0.0.0.0/tcp/8080
-    Daemon is ready
-    ```
+```shell
+RPC API 服务器监听 /ip4/0.0.0.0/tcp/5001
+WebUI：http://0.0.0.0:5001/webui
+网关服务器监听 /ip4/0.0.0.0/tcp/8080
+守护进程已准备就绪
+```
 
-    You can now stop watching the log.
+你现在可以停止查看日志。
 
-1. Run IPFS commands with `docker exec ipfs_host ipfs <args...>`. For example:
+1. 使用 `docker exec ipfs_host ipfs <args...>` 运行 IPFS 命令。例如：
 
-    To connect to peers:
+连接到对等点：
 
-    ```shell
-    docker exec ipfs_host ipfs swarm peers
-    ```
+```shell
+docker exec ipfs_host ipfs swarm peers
+```
 
-    To add files:
+添加文件：
 
-    ```shell
-    cp -r <something> $ipfs_staging
-    docker exec ipfs_host ipfs add -r /export/<something>
-    ```
+```shell
+cp -r <something> $ipfs_staging
+docker exec ipfs_host ipfs add -r /export/<something>
+```
 
-1. Stop the running container:
+1. 停止正在运行的容器：
 
-    ```shell
-    docker stop ipfs_host
-    ```
+```shell
+docker stop ipfs_host
+```
 
-When starting a container running ipfs for the first time with an empty data directory, it will call `ipfs init` to initialize configuration files and generate a new keypair. At this time, you can choose which profile to apply using the `IPFS_PROFILE` environment variable:
+首次使用空数据目录启动运行 ipfs 的容器时，它将调用 `ipfs init` 来初始化配置文件并生成新的密钥对。此时，你可以使用 `IPFS_PROFILE` 环境变量选择要应用哪个配置文件：
 
 ```shell
 docker run -d --name ipfs_host -e IPFS_PROFILE=server -v $ipfs_staging:/export -v $ipfs_data:/data/ipfs -p 4001:4001 -p 4001:4001/udp -p 127.0.0.1:8080:8080 -p 127.0.0.1:5001:5001 ipfs/kubo:latest
 ```
 
-## Customizing your node
+## 自定义你的节点
 
-Custom initialization code can be run by mounting scripts in the `/container-init.d` directory in the container. These are executed sequentially and in lexicographic order, after `ipfs init` is run and the swarm keys are copied (if the IPFS repo needs initialization), and before the IPFS daemon is started.
+可以通过在容器中的 `/container-init.d` 目录中挂载脚本来运行自定义初始化代码。这些操作按顺序按字典顺序执行，在运行 `ipfs init` 并复制 swarm 密钥之后（如果 IPFS repo 需要初始化），在启动 IPFS 守护进程之前。
 
-Since this runs each time the container is started, you should check if your initialization code should be idempotent, particularly if you're persisting state outside of the container (e.g. using mounted directories).
+由于每次启动容器时都会运行此操作，因此你应该检查初始化代码是否应该是幂等的，特别是如果你在容器外部保持状态（例如使用已安装的目录）。
 
-For example, this sets a custom bootstrap node before the daemon starts:
+例如，在守护进程启动之前设置自定义引导节点：
 
 ```shell
 #!/bin/sh
@@ -88,48 +88,47 @@ ipfs bootstrap rm all
 ipfs bootstrap add "/ip4/$PRIVATE_PEER_IP_ADDR/tcp/4001/ipfs/$PRIVATE_PEER_ID"
 ```
 
-This shows how to mount the file into the `container-init.d` directory when running the container:
+这显示了如何在运行容器时将文件挂载到 `container-init.d` 目录中：
 
 ```shell
 docker run -d --name ipfs \
-  -e PRIVATE_PEER_ID=... \
-  -e PRIVATE_PEER_IP_ADDR=... \
-  -v ./001-test.sh:/container-init.d/001-test.sh \
-  -p 4001:4001 \
-  -p 127.0.0.1:8080:8080 \
-  -p 127.0.0.1:5001:5001 \
-  ipfs/kubo
+-e PRIVATE_PEER_ID=... \
+-e PRIVATE_PEER_IP_ADDR=... \
+-v ./001-test.sh:/container-init.d/001-test.sh \
+-p 4001:4001 \
+-p 127.0.0.1:8080:8080 \
+-p 127.0.0.1:5001:5001 \
+ipfs/kubo
 ```
 
-:::tip Use in custom images
-See the `gateway` example on the [go-ipfs-docker-examples repository](https://github.com/ipfs-shipyard/go-ipfs-docker-examples)
+:::tip 在自定义图像中使用
+请参阅 [go-ipfs-docker-examples 存储库](https://github.com/ipfs-shipyard/go-ipfs-docker-examples) 上的 `gateway` 示例
 :::
 
-## Private swarms inside Docker
+## Docker 中的私有群集
 
-It is possible to initialize the container with a swarm key file (`/data/ipfs/swarm.key`) using the variables `IPFS_SWARM_KEY` and `IPFS_SWARM_KEY_FILE`. The `IPFS_SWARM_KEY` creates `swarm.key` with the contents of the variable itself, while `IPFS_SWARM_KEY_FILE` copies the key from a path stored in the variable. The `IPFS_SWARM_KEY_FILE` **overwrites** the key generated by `IPFS_SWARM_KEY`.
+可以使用变量 `IPFS_SWARM_KEY` 和 `IPFS_SWARM_KEY_FILE` 使用群集密钥文件 (`/data/ipfs/swarm.key`) 初始化容器。`IPFS_SWARM_KEY` 使用变量本身的内容创建 `swarm.key`，而 `IPFS_SWARM_KEY_FILE` 从存储在变量中的路径复制密钥。 `IPFS_SWARM_KEY_FILE` **覆盖**由 `IPFS_SWARM_KEY` 生成的密钥。
 
 ```shell
 docker run -d --name ipfs_host -e IPFS_SWARM_KEY=<your swarm key> -v $ipfs_staging:/export -v $ipfs_data:/data/ipfs -p 4001:4001 -p 4001:4001/udp -p 127.0.0.1:8080:8080 -p 127.0.0.1:5001:5001 ipfs/kubo:latest
 ```
 
-The swarm key initialization can also be done using docker secrets, and requires `docker swarm` or `docker-compose`:
+也可以使用 docker secrets 初始化 swarm key，需要 `docker swarm` 或 `docker-compose`：
 
 ```shell
 cat your_swarm.key | docker secret create swarm_key_secret -
 docker run -d --name ipfs_host --secret swarm_key_secret -e IPFS_SWARM_KEY_FILE=/run/secrets/swarm_key_secret -v $ipfs_staging:/export -v $ipfs_data:/data/ipfs -p 4001:4001 -p 4001:4001/udp -p 127.0.0.1:8080:8080 -p 127.0.0.1:5001:5001 ipfs/kubo:latest
 ```
+## Docker 内部的密钥轮换
 
-## Key rotation inside Docker
-
-It is possible to do key rotation in an ephemeral container that is temporarily executing against a volume that is mounted under `/data/ipfs`:
+可以在临时容器中执行密钥轮换，该容器临时针对挂载在 `/data/ipfs` 下的卷执行：
 
 ```shell
-# given container named 'ipfs-test' that persists repo at /path/to/persisted/.ipfs
+# 给定名为 'ipfs-test' 的容器，该容器在 /path/to/persisted/.ipfs 处持久化 repo
 docker run -d --name ipfs-test -v /path/to/persisted/.ipfs:/data/ipfs ipfs/kubo:latest
-docker stop ipfs-test  
+docker stop ipfs-test
 
-# key rotation works like this (old key saved under 'old-self')
+# 密钥轮换的工作方式如下（旧密钥保存在 'old-self' 下）
 docker run --rm -it -v /path/to/persisted/.ipfs:/data/ipfs ipfs/kubo:latest key rotate -o old-self -t ed25519
-docker start ipfs-test # will start with the new key
+docker start ipfs-test # 将使用新密钥启动
 ```
