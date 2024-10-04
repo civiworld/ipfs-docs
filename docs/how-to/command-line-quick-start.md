@@ -1,38 +1,37 @@
 ---
-title: Initialize a Kubo node and interact with the IPFS Network
-description: Initialize a Kubo node repository, take your node online, interact with the IPFS network, and view the web console on your local node using IPFS Desktop
+title：初始化 Kubo 节点并与 IPFS 网络交互
+description：初始化 Kubo 节点存储库，使你的节点在线，与 IPFS 网络交互，并使用 IPFS Desktop 查看本地节点上的 Web 控制台
 ---
 
-# Initialize a Kubo node and interact with the IPFS Network
+# 初始化 Kubo 节点并与 IPFS 网络交互
 
-In this tutorial, you will initialize an IPFS Kubo node repository, take your node online, interact with the IPFS network, and view the web console on your local node. If you run into any problems while following this guide, see [Troubleshooting](#troubleshooting).
+在本教程中，你将初始化 IPFS Kubo 节点存储库，使你的节点在线，与 IPFS 网络交互，并查看本地节点上的 Web 控制台。如果你在遵循本指南时遇到任何问题，请参阅 [故障排除](#troubleshooting)。
 
-## Prerequisites
+## 先决条件
 
-If you have not yet installed Kubo, follow the [Kubo install guide](../install/command-line.md).
+如果你尚未安装 Kubo，请按照 [Kubo 安装指南](../install/command-line.md) 操作。
 
-## Initialize the repository
+## 初始化存储库
 
-`ipfs` stores all its settings and internal data in a directory called _the repository._ Before using Kubo for the first time, you’ll need to initialize the repository. 
+`ipfs` 将其所有设置和内部数据存储在名为 _the repository._ 的目录中。在首次使用 Kubo 之前，你需要初始化存储库。
 
 :::tip
- - If you are running a Kubo node in a data center, you should initialize IPFS with the `server` profile. Doing so will prevent IPFS from creating data center-internal traffic trying to discover local nodes:
-
+ - 如果你在数据中心运行 Kubo 节点，则应使用“服务器”配置文件初始化 IPFS。这样做将阻止 IPFS 创建试图发现本地节点的数据中心内部流量：
     ```bash
     ipfs init --profile server
     ```
- - Be careful using `sudo` on Unix platforms (including macOS)! Running `sudo ipfs init` will create the repository for the `root` user, instead of your local user account. Kubo doesn't require root privileges, so it's best to run all `ipfs` commands as a regular user!
+ - 在 Unix 平台（包括 macOS）上使用 `sudo` 时要小心！运行 `sudo ipfs init` 将为 `root` 用户创建存储库，而不是你的本地用户帐户。Kubo 不需要 root 权限，因此最好以普通用户身份运行所有 `ipfs` 命令！
 :::
 
-1. Open a terminal window.
+1. 打开一个终端窗口。
 
-1. Initialize the repository with the `ipfs init` command
+1. 使用 `ipfs init` 命令初始化存储库
 
     ```bash
     ipfs init
     ```
 
-   Output similar to the following displays:
+   输出类似以下内容：
 
     ```bash
     > initializing ipfs node at /Users/jbenet/.ipfs
@@ -44,20 +43,18 @@ If you have not yet installed Kubo, follow the [Kubo install guide](../install/c
     ```
     
     :::tip
-    The hash next to `peer identity` is your node’s ID and will be different from the one shown in the above output. Other nodes on the network use `peer identity` to find and connect to you. 
-    
-    Run `ipfs id` to display the `peer identity` if you need it.
+    `peer identifier` 旁边的哈希是你的节点 ID，与上面输出中显示的不同。网络上的其他节点使用`peer identifier`来查找和连接你。
+    如果需要，运行`ipfs id`来显示 `peer identity`。
     :::
 
 
 
-2. Now, try running the command suggested to you in the output of `ipfs init` (i.e. `ipfs cat /ipfs/QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG/readme`):
-
+2. 现在，尝试运行`ipfs init`输出中建议的命令（即`ipfs cat /ipfs/QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG/readme`）：
    ```bash
    ipfs cat /ipfs/QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG/readme
    ```
 
-    You should see something like this:
+   你应该看到类似这样的内容：
 
     ```
     Hello and Welcome to IPFS!
@@ -88,29 +85,29 @@ If you have not yet installed Kubo, follow the [Kubo install guide](../install/c
       ./security-notes
     ```
 
-1. The `quick-start` directory shows other example commands to try. To display the contents of `quick-start, run:
+1. `quick-start` 目录显示了其他可供尝试的示例命令。要显示 `quick-start` 的内容，请运行：
 
     ```bash
     ipfs cat /ipfs/QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG/quick-start
     ```
 
    :::tip
-   There are a whole host of other configuration options you can set — see the [the full reference](https://github.com/ipfs/kubo/blob/master/docs/config.md) for more.
+   你可以设置一大堆其他配置选项 - 有关详细信息，请参阅[完整参考]（https://github.com/ipfs/kubo/blob/master/docs/config.md）。
    :::
 
-## Take your node online
+## 使你的节点联机
 
-Next, take your node online and interact with the IPFS network:
+接下来，让你的节点上线并与 IPFS 网络进行交互：
 
-1. Open another terminal window. 
+1. 打开另一个终端窗口。
 
-2. Start the IPFS daemon in the new terminal window:
+2. 在新终端窗口中启动 IPFS 守护程序：
 
     ```bash
     ipfs daemon
     ```
 
-   After a few moments, output like the following displays, and your node is ready:
+   片刻之后，将显示如下输出，表示你的节点已准备就绪：
 
     ```bash
     > Initializing daemon...
@@ -118,23 +115,23 @@ Next, take your node online and interact with the IPFS network:
     > Gateway server listening on /ip4/127.0.0.1/tcp/8080
     ```
 
-    Make a note of the TCP ports in the output. If they are different, use yours in the commands below.
+   记下输出中的 TCP 端口。如果它们不同，请在下面的命令中使用你的端口。
 
     ::: danger NEVER EXPOSE THE RPC API TO THE PUBLIC INTERNET
 
-    The API port (by default `5001`) provides admin-level access to your Kubo IPFS node.  See [RPC API v0 docs](../reference/kubo/rpc.md) for more information.
+   API 端口（默认为 `5001`）提供对你的 Kubo IPFS 节点的管理员级访问权限。有关更多信息，请参阅 [RPC API v0 文档](../reference/kubo/rpc.md)。
 
     :::
 
-1. Switch back to your original terminal window. 
+1. 切换回原来的终端窗口。
 
-1. If you’re connected to the network, run `ipfs swarm peers` to see the IPFS addresses of your peers:
+1. 如果你已连接到网络，请运行`ipfs swarm peers`以查看你的对等方的 IPFS 地址：
 
     ```bash
     ipfs swarm peers
     ```
 
-    Output similar to the following displays:
+   输出类似以下内容：
 
     ```bash
     > /ip4/104.131.131.82/tcp/4001/p2p/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ
@@ -143,57 +140,57 @@ Next, take your node online and interact with the IPFS network:
     > /ip4/178.62.8.190/tcp/4002/p2p/QmdXzZ25cyzSF99csCQmmPZ1NTbWTe8qtKFaZKpZQPdTFB
     ```
 
-    The addresses displayed are composed of a `<transport address>` (i.e. `/ip4/104.131.131.82/tcp/4001`) and a `<hash-of-public-key>` (i.e. `QmSoLju6m7xTh3DuokvT3886QRYqxAzb1kShaanJgW36yx`), resulting in an address of the form `<transport address>/p2p/<hash-of-public-key>`.
+   显示的地址由 `<传输地址 transport address>`（即 `/ip4/104.131.131.82/tcp/4001`）和 `<公钥哈希值 hash-of-public-key>`（即 `QmSoLju6m7xTh3DuokvT3886QRYqxAzb1kShaanJgW36yx`）组成，从而产生形式为 `<传输地址 transport address>/p2p/<公钥哈希值 hash-of-public-key>` 的地址。
 
-1. Now, fetch a cool picture of a spaceship launch from the network using `ipfs cat`:
+1. 现在，使用`ipfs cat`从网络获取一张宇宙飞船发射的酷图片：
 
     ```bash
     ipfs cat /ipfs/QmSgvgwxZGaBLqkGyWemEDqikCqU52XxsYLKtdy3vGZ8uq > ~/Desktop/spaceship-launch.jpg
     ```
 
-   When the above command runs, Kubo searches the IPFS network for the CID specified (`QmSgv...`) and writes the data into a file called `spaceship-launch.jpg`.
+   当上述命令运行时，Kubo 会在 IPFS 网络中搜索指定的 CID（`QmSgv...`），并将数据写入名为`spaceship-launch.jpg`的文件中。
 
-1. Verify that a photo of a spaceship launch called `spaceship-launch.jpg` is located in your `~/Desktop`.
+1. 验证名为“spaceship-launch.jpg”的宇宙飞船发射照片是否位于你的“~/Desktop”中。
 
-1. Next, create a file to add to your node:
+1. 接下来，创建一个文件添加到你的节点：
 
    ```bash
    echo "meow" > meow.txt
    ```
 
-1. Add `meow.txt` using `ipfs add`:
+1. 使用`ipfs add`添加`meow.txt`：
 
    ```bash
    ipfs add meow.txt
    ```
-  
-   Output similar to the following displays:
+
+   输出类似以下内容：
 
    ```bash
    > added QmabZ1pL9npKXJg8JGdMwQMJo2NCVy9yDVYjhiHK4LTJQH meow.txt
    ```
 
-   Make note of the CID (i.e. `QmabZ1..`), as you'll need it in the next step.
+   记下 CID（即`QmabZ1..`），因为你在下一步中会需要它。
 
-1. View the objects by specifying the CID `<CID>` returned in the previous step:
+1. 通过指定上一步返回的 CID `<CID>` 查看对象：
 
     :::tip
-    The example below uses `curl` as the browser, but you can open the IPFS address in other browsers. Depending on the state of the network, `curl` may take a while due to public gateways being overloaded or having a hard time reaching you.
+   下面的示例使用`curl`作为浏览器，但你可以在其他浏览器中打开 IPFS 地址。根据网络状态，`curl`可能需要一段时间，因为公共网关过载或难以联系到你。
     :::
 
     ```bash
     curl "https://ipfs.io/ipfs/<CID>"
     ```
 
-    Output like the following displays:
+   输出类似下面的内容：
 
     ```bash
     > meow
     ```
 
-    In this step, the gateway served a file _from your computer_. The gateway queried the distributed hash table (DHT), found your machine, requested the file, your computer sent it to the gateway, and the gateway sent it to your browser.
+   在此步骤中，网关从你的计算机提供文件。网关查询分布式哈希表 (DHT)，找到你的计算机，请求文件，你的计算机将其发送到网关，网关将其发送到你的浏览器。
 
-1. View the objects on your own local gateway:
+1. 查看自己本地网关上的对象：
 
     ```bash
     curl "http://127.0.0.1:8080/ipfs/<CID>"
@@ -203,53 +200,53 @@ Next, take your node online and interact with the IPFS network:
     > meow
     ```
 
-    By default, your gateway is not exposed to the world. It only works locally.
+   默认情况下，你的网关不会向外界公开。它仅在本地工作。
 
-## Interact with the node using the web console
+## 使用 Web 控制台与节点交互
 
-You can view the web console for your local node by navigating to `localhost:5001/webui`. 
+你可以通过导航到`localhost:5001/webui`来查看本地节点的Web控制台。
 
-![Web console connection view](./images/command-line-quick-start/webui-connection.png)
+![Web 控制台连接视图](./images/command-line-quick-start/webui-connection.png)
 
-The web console shows files that are in your [Mutable File System (MFS)](../concepts/file-systems.md#mutable-file-system-mfs). MFS is a tool built into the web console that helps you navigate IPFS files in the same way you would a standard, name-based file system.
+Web 控制台显示 [可变文件系统 (MFS)](../concepts/file-systems.md#mutable-file-system-mfs) 中的文件。MFS 是 Web 控制台内置的工具，可帮助你以与标准、基于名称的文件系统相同的方式浏览 IPFS 文件。
 
-When you add files using the [CLI command `ipfs add ...`](../reference/kubo/cli.md#ipfs-add), these files are not automatically available within the MFS. To view files in IPFS Desktop that you added using the CLI, you must copy the files over to the MFS:
+当你使用 [CLI 命令 `ipfs add ...`](../reference/kubo/cli.md#ipfs-add) 添加文件时，这些文件不会自动在 MFS 中可用。要查看使用 CLI 添加的 IPFS Desktop 中的文件，你必须将文件复制到 MFS：
 
-1. Enter `localhost:5001/webui` into your browser to view the web console.
+1. 在浏览器中输入`localhost:5001/webui`以查看Web控制台。
 
-1. In the left sidebar menu, click **Files**. An empty directory displays, along with the following message:
+1. 在左侧边栏菜单中，单击**文件**。将显示一个空目录，并显示以下消息：
 
     ```plaintext
     No files here yet! Add files to your local IPFS node by clicking the Import button above.
     ```
 
-1. Navigate back to your original terminal window.
+1. 导航回你原来的终端窗口。
 
-1. Using the CID `<CID>` obtained when adding `meow.txt` to your node in the previous step, copy the files over to the MFS.
+1. 使用上一步将`meow.txt`添加到节点时获得的 CID `<CID>`，将文件复制到 MFS。
 
     ```shell
     ipfs files cp /ipfs/<CID> /meow.txt
     ```
 
-    For example, if the `<CID>` of `meow.txt` is `QmabZ1pL9npKXJg8JGdMwQMJo2NCVy9yDVYjhiHK4LTJQH`, it would be copied to the MFS with:
+   例如，如果 `meow.txt` 的 `<CID>` 是 `QmabZ1pL9npKXJg8JGdMwQMJo2NCVy9yDVYjhiHK4LTJQH`，它将被复制到 MFS，如下所示：
 
     ```shell
     ipfs files cp /ipfs/QmabZ1pL9npKXJg8JGdMwQMJo2NCVy9yDVYjhiHK4LTJQH /meow.txt
     ```
 
-1. In your browser, refresh the **Files** page. The list of files displays `meow.txt`.
+1. 在浏览器中，刷新**文件**页面。文件列表显示`meow.txt`。
 
-## Use IPFS Companion with Kubo
+## 将 IPFS Compon 与 Kubo 结合使用
 
-You can use IPFS Companion, a browser extension that simplifies access to IPFS resources and adds support for the IPFS protocol, to automatically redirect IPFS gateway requests to your local daemon so that you are not relying on remote gateways.
+你可以使用 IPFS Companion（一种浏览器扩展程序），它简化了对 IPFS 资源的访问并增加了对 IPFS 协议的支持，可以自动将 IPFS 网关请求重定向到你的本地守护程序，这样你就不依赖远程网关。
 
-For more information on IPFS companion, including how to install it, see the [IPFS Companion quickstart](../install/ipfs-companion.md).
+有关 IPFS Companion 的更多信息，包括如何安装它，请参阅 [IPFS Companion 快速入门](../install/ipfs-companion.md)。
 
-## Troubleshooting
+## 故障排除
 
-### Check your Go version
+### 检查你的 Go 版本
 
-IPFS works with Go 1.12.0 or later. To check what go version you have installed, type `go version`:
+IPFS 适用于 Go 1.12.0 或更高版本。要检查你安装的 go 版本，请输入`go version`：
 
 ```bash
 go version
@@ -257,12 +254,12 @@ go version
 > go version go1.12.2 linux/amd64
 ```
 
-If you need to update, we recommend you install from the [canonical Go packages](https://go.dev/doc/install). Package managers often contain out-of-date Go packages.
+如果你需要更新，我们建议你从 [规范的 Go 软件包](https://go.dev/doc/install) 安装。软件包管理器通常包含过时的 Go 软件包。
 
-### Check that FUSE is installed
+### 检查 FUSE 是否已安装
 
-You need to install and set up FUSE in order to mount the file system. For more details on setting up FUSE, see [github.com/ipfs/kubo/blob/master/docs/fuse.md](https://github.com/ipfs/kubo/blob/master/docs/fuse.md)
+你需要安装并设置 FUSE 才能挂载文件系统。有关设置 FUSE 的更多详细信息，请参阅 [github.com/ipfs/kubo/blob/master/docs/fuse.md](https://github.com/ipfs/kubo/blob/master/docs/fuse.md)
 
-### Further help
+### 进一步帮助
 
-The IPFS community is friendly and able to help! [Get support from other IPFS developers in the IPFS forum](../community/README.md#get-technical-support-and-help), or join [community chat channels](../community/README.md#chat).
+IPFS 社区很友好，能够提供帮助！[在 IPFS 论坛中获取其他 IPFS 开发人员的支持](../community/README.md#get-technical-support-and-help)，或加入 [社区聊天频道](../community/README.md#chat)。

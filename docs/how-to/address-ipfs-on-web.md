@@ -1,205 +1,203 @@
 ---
-title: Address IPFS on the web
-description: Hands-on guides to using and developing with IPFS to build decentralized web apps and services.
+title：在网络上处理 IPFS
+description：使用和开发 IPFS 以构建去中心化网络应用和服务的实践指南。
 ---
 
-# Address IPFS on the web
+# 在网络上处理 IPFS
 
-This page describes how to address a node in the IPFS network. Clients that support the IPFS protocol can ignore HTTP details and retrieve data natively, while those that don't can fetch the resource from HTTP server at `ipfs.io` gateway, as long as they have the content identifier (CID).
-When `ipfs.io` or any other [public gateway](https://ipfs.github.io/public-gateway-checker/) goes down, IPFS aware clients will still be able to fetch the content from the IPFS network as long as at least one node still provides the data behind the CID to the network:
+此页面介绍如何处理 IPFS 网络中的节点。支持 IPFS 协议的客户端可以忽略 HTTP 详细信息并本地检索数据，而不支持 IPFS 协议的客户端只要具有内容标识符 (CID)，就可以从 `ipfs.io` 网关的 HTTP 服务器获取资源。
+当 `ipfs.io` 或任何其他 [公共网关](https://ipfs.github.io/public-gateway-checker/) 发生故障时，只要至少有一个节点仍向网络提供 CID 背后的数据，IPFS 感知客户端仍然能够从 IPFS 网络获取内容：
 
-Addresses using a gateway use the following form, where `<gateway>` is the gateway address, and `<CID>` is the content identifier
+使用网关的地址使用以下形式，其中 `<gateway>` 是网关地址，`<CID>` 是内容标识符
 
 ```shell
 https://<gateway>/ipfs/<CID>
 ```
 
-For example:
+例如：
 
 ```shell
 https://ipfs.io/ipfs/bafybeihkoviema7g3gxyt6la7vd5ho32ictqbilu3wnlo3rs7ewhnp7lly
 ```
 
-A [self-hosted local gateway](https://docs.ipfs.io/install/) can also be used, instead of `ipfs.io`. 
+也可以使用 [自托管本地网关](https://docs.ipfs.io/install/)，而不是`ipfs.io`。
 
-## IPFS addressing in brief
+## IPFS 寻址简介
 
-In IPFS, content addresses are path-like; that is, the addresses are components separated by slashes. The first component is the protocol, which tells you how to interpret everything after it.
+在 IPFS 中，内容地址是路径式的；也就是说，地址是用斜杠分隔的组件。第一个组件是协议，它告诉你如何解释其后的所有内容。
 
-Content referenced by a hash may have named links. For example, a Git commit has a link named `parent`, which is really just a pointer to the hash of another Git commit. Components in an IPFS address after the CID are the named links.
+哈希引用的内容可能有命名链接。例如，Git 提交有一个名为“parent”的链接，它实际上只是指向另一个 Git 提交哈希的指针。IPFS 地址中 CID 后面的组件是命名链接。
 
-Since content addresses aren’t URLs, using them in a web browser requires reformatting. The options for this are:
+由于内容地址不是 URL，因此在 Web 浏览器中使用它们需要重新格式化。为此，选项包括：
 
-1. A [path gateway](#path-gateway)
-   
-   ```shell
-   https://<gateway-host>/ipfs/<cid>/<path>
-   ```
- 
-2. A [subdomain gateway](#subdomain-gateway), for hosting websites with origin isolation. This is more secure, but harder to set up.  
+1. [路径网关](#path-gateway)
 
-   ```shell
-   https://<cid>.ipfs.<gateway-host>/<path> 
-   ```
-   
-3. Native protocol handlers, when you don't want to hard-code a specific HTTP gateway in the URI:
+```shell
+https://<gateway-host>/ipfs/<cid>/<path>
+```
 
-   ```shell
-   ipfs://<cid>/<path>
-   ```
-   
-   ```shell
-   ipns://<ipns-name>/<path>
-   ```
+2. [子域网关](#subdomain-gateway)，用于托管具有源隔离的网站。这更安全，但设置起来更困难。
 
-## HTTP gateways
+```shell
+https://<cid>.ipfs.<gateway-host>/<path>
+```
 
-HTTP gateways allow tools that "speak" HTTP but do not speak "IPFS" to communicate. They are the first stage of the upgrade path for the web. [More information about IPFS Gateways](../concepts/ipfs-gateway.md). 
+3. 本机协议处理程序，当你不想在 URI 中硬编码特定 HTTP 网关时：
 
-One downside of HTTP gateways is centralization. Location-based addressing of a gateway depends on both DNS and HTTPS/TLS, which relies on trust in [certificate authorities](https://en.wikipedia.org/wiki/Certificate_authority) (CAs) and [public key infrastructure](https://en.wikipedia.org/wiki/Public_key_infrastructure) (PKI). In the long term, these issues should be mitigated by the use of opportunistic protocol upgrade schemes.
+```shell
+ipfs://<cid>/<path>
+```
 
-### Protocol upgrade
+```shell
+ipns://<ipns-name>/<path>
+```
 
-Long term, deserialized responses returned by a public HTTP gateway are used only as a fallback when no native implementation of IPFS is available.
+## HTTP 网关
 
-IPFS clients, user agents, tools and extensions should detect CIDs in URLs, DNSLinks or IPFS content paths and resolve them directly over the IPFS protocol. This ensures that the retrieved data matches the expected hash. 
+HTTP 网关允许“说”HTTP 但不说“IPFS”的工具进行通信。它们是 Web 升级路径的第一阶段。[有关 IPFS 网关的更多信息](../concepts/ipfs-gateway.md)。
 
-Examples of user agents that support IPFS natively are:
+HTTP 网关的一个缺点是集中化。网关的基于位置的寻址依赖于 DNS 和 HTTPS/TLS，这依赖于对 [证书颁发机构](https://en.wikipedia.org/wiki/Certificate_authority) (CA) 和 [公钥基础设施](https://en.wikipedia.org/wiki/Public_key_infrastructure) (PKI) 的信任。从长远来看，这些问题应该通过使用机会性协议升级方案来缓解。
+
+### 协议升级
+
+从长远来看，公共 HTTP 网关返回的反序列化响应仅在没有可用的 IPFS 本机实现时用作后备。
+
+IPFS 客户端、用户代理、工具和扩展应检测 URL、DNSLink 或 IPFS 内容路径中的 CID，并通过 IPFS 协议直接解析它们。这可确保检索到的数据与预期的哈希值匹配。
+
+原生支持 IPFS 的用户代理示例包括：
 
 - [Brave](https://brave.com/ipfs-support/)
-- A standard web browser with [IPFS Companion](https://docs.ipfs.tech/install/ipfs-companion/) installed next to an IPFS node, such as [IPFS Desktop](https://docs.ipfs.tech/install/ipfs-desktop/)
+- 安装在 IPFS 节点旁边的标准 Web 浏览器，其中安装了 [IPFS Companion](https://docs.ipfs.tech/install/ipfs-companion/)，例如 [IPFS Desktop](https://docs.ipfs.tech/install/ipfs-desktop/)
 
-## Path gateway
+## 路径网关
 
-A path gateway is the most basic scheme. In this scheme, a URL path used for content addressing is effectively a resource name without a canonical location. The HTTP server provides the location part, which makes it possible for browsers to interpret an IPFS content path relative to the current server and work without need for any conversion. Given a gateway host address (i.e. `ipfs.io`), and a path to the resource, (i.e `/path/to/resource`), a [CID](../concepts/content-addressing.md) (`<cid>`), IPNS ID (`<ipnsid>`) or [DNSLink](../concepts/dnslink.md) (`<dnslink>`) can all be used.
+路径网关是最基本的方案。在此方案中，用于内容寻址的 URL 路径实际上是没有规范位置的资源名称。HTTP 服务器提供位置部分，这使得浏览器能够解释相对于当前服务器的 IPFS 内容路径，并且无需任何转换即可工作。给定网关主机地址（即 `ipfs.io`）和资源路径（即 `/path/to/resource`），可以使用 [CID](../concepts/content-addressing.md) (`<cid>`)、IPNS ID (`<ipnsid>`) 或 [DNSLink](../concepts/dnslink.md) (`<dnslink>`)。
 
-[Using a CID](#cid)
-[Using IPNS](#ipns)
-[Using DNSLink](#dnslink)
+[使用 CID](#cid)
+[使用 IPNS](#ipns)
+[使用 DNSLink](#dnslink)
 
 ### CID
-Given a CID `<cid>`, a URL path can be constructed as follows:
+给定 CID `<cid>`，可以构建 URL 路径如下如下：
 
-```plaintext
+```纯文本
 https://<gateway-host>.tld/ipfs/<cid>/path/to/resource
 ```
 
-Example:
+示例：
 
-```plaintext
+```纯文本
 https://ipfs.io/ipfs/bafybeiemxf5abjwjbikoz4mc3a3dla6ual3jsgpdr4cjr3oz3evfyavhwq/wiki/Vincent_van_Gogh.html
 https://ipfs.io/ipfs/QmT5NvUtoM5nWFfrQdVrFtvGfKFmG7AHE8P34isapyhCxX/wiki/Mars.html
 ```
 
 ### IPNS
-Given an [IPNS name](https://specs.ipfs.tech/ipns/ipns-record/#ipns-name) `<ipns-name>`, a URL path can be constructed as follows:
+给定一个 [IPNS 名称](https://specs.ipfs.tech/ipns/ipns-record/#ipns-name) `<ipns-name>`，URL 路径可以构造如下：
 
-```plaintext
+```纯文本
 https://<gateway-host>.tld/ipns/<ipns-name>/path/to/resource
 ```
 
-Example:
+示例：
 
-```plaintext
+```纯文本
 https://ipfs.io/ipns/k51qzi5uqu5dlvj2baxnqndepeb86cbk3ng7n3i46uzyxzyqj2xjonzllnv0v8
 ```
-
 ### DNSLink
-Given a DNS name with a [DNSLink](https://dnslink.dev/) text record `<dnslink>`, a URL path can be constructed as follows:
+给定一个带有 [DNSLink](https://dnslink.dev/) 文本记录 `<dnslink>` 的 DNS 名称，可以按如下方式构建 URL 路径：
 
-```plaintext
+```纯文本
 https://<gateway-host>.tld/ipns/<dnslink>/path/to/resource
 ```
 
-Example:
+示例：
 
-```plaintext
+```纯文本
 https://ipfs.io/ipns/tr.wikipedia-on-ipfs.org/wiki/Anasayfa.html
 ```
 
 ::: danger
-In this scheme, all pages share a [single origin](https://en.wikipedia.org/wiki/Same-origin_policy). As such, this type of gateway should only be used when site isolation does not matter. Examples include static content without cookies, local storage, or APIs that require user permission.
+在此方案中，所有页面共享 [单一来源](https://en.wikipedia.org/wiki/Same-origin_policy)。因此，仅当站点隔离无关紧要时才应使用此类网关。示例包括没有 cookie 的静态内容、本地存储或需要用户权限的 API。
 
-When in doubt, use a [subdomain gateway](#subdomain-gateway).
+如有疑问，请使用 [子域网关](#subdomain-gateway)。
 :::
 
-## Subdomain gateway
+## 子域网关
 
-When [origin-based security](https://en.wikipedia.org/wiki/Same-origin_policy) is needed, a [CIDv1](../concepts/content-addressing.md#identifier-formats) in a case-insensitive encoding such as Base32 or Base36 should be used in the subdomain:
+当需要 [基于来源的安全性](https://en.wikipedia.org/wiki/Same-origin_policy)时，应在 [CIDv1](../concepts/content-addressing.md#identifier-formats) 中使用不区分大小写的编码（例如 Base32 或 Base36）子域名：
 
-```plaintext
+```纯文本
 https://<cidv1b32>.ipfs.<gateway-host>.tld/path/to/resource
 ```
 
-Examples:
+示例：
 
-```plaintext
+```纯文本
 https://bafybeiemxf5abjwjbikoz4mc3a3dla6ual3jsgpdr4cjr3oz3evfyavhwq.ipfs.dweb.link/wiki/
 http://bafybeiemxf5abjwjbikoz4mc3a3dla6ual3jsgpdr4cjr3oz3evfyavhwq.ipfs.localhost:8080/wiki/Vincent_van_Gogh.html
 ```
 
-#### Native support in Kubo
+#### Kubo 中的原生支持
 
-[Kubo](https://dist.ipfs.tech/#kubo) provides native support for subdomain gateways on hostnames defined in the [`Gateway.PublicGateways`](https://github.com/ipfs/kubo/blob/master/docs/config.md#gatewaypublicgateways) configuration map.
+[Kubo](https://dist.ipfs.tech/#kubo) 为在[`Gateway.PublicGateways`](https://github.com/ipfs/kubo/blob/master/docs/config.md#gatewaypublicgateways) 配置图。
 
-Learn more about Kubo configuration for hosting a public gateway:
+详细了解用于托管公共网关的 Kubo 配置：
 
-- [`Gateway.PublicGateways`](https://github.com/ipfs/kubo/blob/master/docs/config.md#gatewaypublicgateways) for defining gateway behavior on specified hostnames
-- [`Gateway` recipes](https://github.com/ipfs/kubo/blob/master/docs/config.md#gateway-recipes) with ready to use one-liners for most common use cases
+- [`Gateway.PublicGateways`](https://github.com/ipfs/kubo/blob/master/docs/config.md#gatewaypublicgateways) 用于定义指定主机名上的网关行为
+- [`Gateway` 配方](https://github.com/ipfs/kubo/blob/master/docs/config.md#gateway-recipes) 包含可用于最常见用例的现成单行代码
 
-::: warning Known issues
+::: 警告 已知问题
 
-1. Some browsers and other user agents force lowercase for the authority part of URLs, breaking case-sensitive CIDs before the HTTP gateway has a chance to read them.
-1. DNS label length is limited to 63 characters ([RFC 1034](https://datatracker.ietf.org/doc/html/rfc1034#page-7))
+1. 某些浏览器和其他用户代理强制将 URL 的权限部分小写，从而在 HTTP 网关有机会读取区分大小写的 CID 之前破坏它们。
+1. DNS 标签长度限制为 63 个字符 ([RFC 1034](https://datatracker.ietf.org/doc/html/rfc1034#page-7))
 
-Due to these limitations, the use of short, case-insensitive CIDv1 in a subdomain context is advised.
-Base32 is the safe default; the less-popular Base36 can be used for longer ED25519 libp2p keys.
+由于这些限制，建议在子域上下文中使用简短、不区分大小写的 CIDv1。
+Base32 是安全的默认设置；不太流行的 Base36 可用于较长的 ED25519 libp2p 密钥。
 
-See the next section to learn how to convert an existing CIDv0 to a DNS-safe representation.
+请参阅下一节，了解如何将现有 CIDv0 转换为 DNS 安全表示。
 
 :::
 
-#### CID conversion for subdomains
+#### 子域的 CID 转换
 
-If you have content identified by an older CIDv0, there are an automatic and a manual option to safely represent it as CIDv1 for use in subdomains and other case-insensitive contexts.
+如果你有由较旧的 CIDv0 标识的内容，则可以使用自动和手动选项将其安全地表示为 CIDv1，以便在子域和其他不区分大小写的上下文中使用。
 
-- [Automatic](#automatic--leverage-the-gateway-in-kubo)
-- [Manual](#manual--use-cidipfsio-or-the-command-line)
+- [自动](#automatic--利用 kubo 中的网关)
+- [手动](#manual--使用 cidipfsio 或命令行)
 
-##### Automatic — leverage the gateway in Kubo
+##### 自动 — 利用 Kubo 中的网关
 
-Using a subdomain gateway as a drop-in replacement for a path one removes the need for manual CID conversion.
+使用子域网关作为路径一的临时替代品，无需手动进行 CID 转换。
 
-Requests for a content path sent to the gateway domain will return an HTTP 301 redirect to a correct subdomain version, taking care of any necessary encoding conversion if needed:
+发送到网关域的内容路径请求将返回 HTTP 301 重定向到正确的子域版本，并在需要时处理任何必要的编码转换：
 
-```plaintext
+```纯文本
 https://<gateway-host>.tld/ipfs/<cid> -> https://<cidv1>.ipfs.<gateway-host>.tld/
 ```
 
-For example, opening the CIDv0 resource at [`https://dweb.link/ipfs/QmT5NvUtoM5nWFfrQdVrFtvGfKFmG7AHE8P34isapyhCxX/wiki/Mars.html`](https://dweb.link/ipfs/QmT5NvUtoM5nWFfrQdVrFtvGfKFmG7AHE8P34isapyhCxX/wiki/Mars.html)
-returns a redirect to a CIDv1 representation at [`https://bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqa.ipfs.dweb.link/wiki/Mars.html`](https://bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqa.ipfs.dweb.link/wiki/Mars.html).
+例如，在 [`https://dweb.link/ipfs/QmT5NvUtoM5nWFfrQdVrFtvGfKFmG7AHE8P34isapyhCxX/wiki/Mars.html`](https://dweb.link/ipfs/QmT5NvUtoM5nWFfrQdVrFtvGfKFmG7AHE8P34isapyhCxX/wiki/Mars.html) 处打开 CIDv0 资源
+将返回重定向到 CIDv1 表示[`https://bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqa.ipfs.dweb.link/wiki/Mars.html`](https://bafybeicgmdpvw4duutrmdxl4a7gc52sxyuk7nz5gby77afwdteh3jc5bqa.ipfs.dweb.link/wiki/Mars.html)。
 
-The gateway converts the CID to case-insensitive encoding.
-The multihash in CIDv1 is the same as in the original CIDv0.
+网关将 CID 转换为不区分大小写的编码。
+CIDv1 中的多重哈希与原始 CIDv0 中的多重哈希相同。
+#### 手动 — 使用 cid.ipfs.io 或命令行
 
-#### Manual — use cid.ipfs.io or the command line
+转换也可以手动完成。
 
-The conversion can also be done manually.
-
-To convert a CID to Base32 with no padding ([RFC4648](https://datatracker.ietf.org/doc/html/rfc4648#section-6)), use [cid.ipfs.io](https://cid.ipfs.io), or the command line. Below is an example using the command line:
+要将 CID 转换为无填充的 Base32 ([RFC4648](https://datatracker.ietf.org/doc/html/rfc4648#section-6))，请使用 [cid.ipfs.io](https://cid.ipfs.io) 或命令行。下面是使用命令行的示例：
 
 ```shell
 ipfs cid base32 QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR
 ```
 
-The output of this is:
+其输出为：
 
 ```shell
 bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi
 ```
 
-PeerIDs can be represented as a [CID with `libp2p-key` multicodec](https://github.com/libp2p/specs/blob/master/RFC/0001-text-peerid-cid.md).
-Base36 is suggested as a safer default for longer keys:
+PeerID 可以表示为 [带有 `libp2p-key` 多编解码器的 CID](https://github.com/libp2p/specs/blob/master/RFC/0001-text-peerid-cid.md)。
+对于较长的密钥，建议使用 Base36 作为更安全的默认设置：
 
 ```shell
 ipfs key list -l --ipns-base base36
@@ -209,32 +207,32 @@ ipfs cid format -v 1 -b base36 --codec libp2p-key QmNnooDu7bfjPFoTZYxMNLWUQJyrVw
 k2k4r8jl0yz8qjgqbmc2cdu5hkqek5rj6flgnlkyywynci20j0iuyfuj
 ```
 
-## DNSLink gateway
+## DNSLink 网关
 
-The gateway provided by Kubo understands the `Host` header present in HTTP requests and will check if [DNSLink](../concepts/dnslink.md) exists for a specified [domain name](https://en.wikipedia.org/wiki/Fully_qualified_domain_name).
-If DNSLink is present, the gateway will return content from a path resolved via DNS TXT record.
-This type of gateway provides full [origin isolation](https://en.wikipedia.org/wiki/Same-origin_policy).
+Kubo 提供的网关了解 HTTP 请求中存在的“Host”标头，并将检查对于指定的 [域名](https://en.wikipedia.org/wiki/Fully_qualified_domain_name)，存在 [DNSLink](../concepts/dnslink.md)。
+如果存在 DNSLink，网关将返回通过 DNS TXT 记录解析的路径中的内容。
+这种类型的网关提供完整的 [来源隔离](https://en.wikipedia.org/wiki/Same-origin_policy)。
 
-An example is this website, [https://docs.ipfs.tech](https://docs.ipfs.tech).
+例如，此网站 [https://docs.ipfs.tech](https://docs.ipfs.tech)。
 
-::: tip
-For a complete DNSLink guide, including tutorials, usage examples, and FAQs, see [dnslink.io](https://dnslink.io).
+::: 提示
+有关完整的 DNSLink 指南，包括教程、使用示例和常见问题解答，请参阅 [dnslink.io](https://dnslink.io)。
 :::
 
-## Native URLs
+## 原生 URL
 
-The native address format is the same as a [subdomain gateway](https://docs.ipfs.tech/how-to/address-ipfs-on-web/#subdomain-gateway) HTTP URL, but with two differences:
+原生地址格式与 [子域网关](https://docs.ipfs.tech/how-to/address-ipfs-on-web/#subdomain-gateway) HTTP URL 相同，但有两点不同：
 
-- The protocol scheme is replaced by the `ipfs` or `ipns` namespace
-- The location-based authority component (the gateway host and port) is replaced with a CID
+- 协议方案由 `ipfs` 或 `ipns` 命名空间替换
+- 基于位置的权限组件（网关主机和端口）由CID
 
-```plaintext
+```纯文本
 ipfs://{cid}/path/to/subresource/cat.jpg
 ```
 
-Examples:
+示例：
 
-```plaintext
+```纯文本
 ipfs://{cidv1}
 ipfs://{cidv1}/path/to/resource
 ipfs://{cidv1}/path/to/resource?query=foo#fragment
@@ -244,45 +242,42 @@ ipns://{cidv1-libp2p-key}/path/to/resource
 ipns://{dnslink-name}/path/to/resource?query=foo#fragment
 ```
 
-::: tip
-Our main goal here is to reuse existing standards that maximize interoperability with existing user-agents like browsers and CLI tools. If something is not clear, HTTP URL rules apply.
+::: 提示
+我们的主要目标是重用现有标准，以最大限度地提高与现有用户代理（如浏览器和 CLI 工具）的互操作性。如果某些内容不清楚，则适用 HTTP URL 规则。
 :::
 
+双斜杠后的第一个元素是表示内容根的标识符。它被解释为用于原点计算的权限组件，为不同内容树的安全上下文提供必要的隔离。
 
-The first element after the double slash is an identifier representing the content root. It is interpreted as an authority component used for origin calculation, which provides necessary isolation between security contexts of different content trees.
+示例：
 
-Example:
-
-```plaintext
+```纯文本
 ipfs://bafybeiemxf5abjwjbikoz4mc3a3dla6ual3jsgpdr4cjr3oz3evfyavhwq/wiki/Vincent_van_Gogh.html
 ```
 
-::: warning Avoid case-sensitive CID 
-Some user agents will force-lowercase the CID component of URL-like address.
-To ensure interoperability with existing libraries and software, use case-insensitive CID encoding. Use of CIDv1 in Base32 or Base36 is advised.
+::: 警告 避免区分大小写的 CID
+某些用户代理会强制将类似 URL 地址的 CID 组件小写。
+为确保与现有库和软件的互操作性，请使用不区分大小写的 CID 编码。建议使用 Base32 或 Base36 中的 CIDv1。
 :::
+### 将原生地址转换为规范内容路径
 
-### Turning native address to a canonical content path
+每个“URL”地址都可以轻松转换回内容路径：
 
-Every "URL" address can be turned back into a content path with ease:
+示例：
+- `ipfs://{immutable-root}/path/to/resourceA` 转换为 `/ipfs/{immutable-root}/path/to/resourceA`
+- `ipns://{mutable-root}/path/to/resourceB` 转换为 `/ipns/{mutable-root}/path/to/resourceB`
 
-Examples:
-- `ipfs://{immutable-root}/path/to/resourceA` converts to `/ipfs/{immutable-root}/path/to/resourceA`  
-- `ipns://{mutable-root}/path/to/resourceB` converts to `/ipns/{mutable-root}/path/to/resourceB`
+## 更多资源
 
-## Further resources
+### 实施者的技术规范
 
-### Technical specification for implementers
+请参阅 [IPFS 网页浏览器内存储库](https://github.com/ipfs/in-web-browsers/blob/master/ADDRESSING.md)。
 
-See the [IPFS in-web-browsers repository](https://github.com/ipfs/in-web-browsers/blob/master/ADDRESSING.md).
+### 地址方案讨论背景
 
-### Background on address scheme discussions
-
-Discussions around IPFS addressing have been ongoing since [@jbenet](https://github.com/jbenet) published the [IPFS whitepaper](https://ipfs.io/ipfs/QmR7GSQM93Cx5eAg6a6yRzNde1FQv7uL6X1o4k7zrJa3LX/ipfs.draft3.pdf), with a number of other approaches being proposed. This long-standing design discussion includes many lengthy GitHub issue threads, but a good summary can be found in [this PR](https://github.com/ipfs/specs/pull/152).
+自从 [@jbenet](https://github.com/jbenet) 发布 [IPFS 白皮书](https://ipfs.io/ipfs/QmR7GSQM93Cx5eAg6a6yRzNde1FQv7uL6X1o4k7zrJa3LX/ipfs.draft3.pdf) 以来，围绕 IPFS 寻址的讨论一直在进行，并提出了许多其他方法。这个长期的设计讨论包括许多冗长的 GitHub 问题线程，但可以在 [此 PR](https://github.com/ipfs/specs/pull/152) 中找到一个很好的摘要。
 
 ### IPFS Companion
 
-[IPFS Companion](https://github.com/ipfs/ipfs-companion#readme) is a browser extension that simplifies access to IPFS resources.
+[IPFS Companion](https://github.com/ipfs/ipfs-companion#readme) 是一个简化对 IPFS 资源的访问的浏览器扩展。
 
-It provides support for native URLs and will automatically redirect IPFS gateway requests to your local Kubo daemon so that you are not relying on or trusting remote gateways.
-
+它提供对本机 URL 的支持，并会自动将 IPFS 网关请求重定向到你的本地 Kubo 守护程序，这样你就不会依赖或信任远程网关。

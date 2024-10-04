@@ -5,31 +5,30 @@ description:  Learn what IPFS is and isn't.
 
 # What is IPFS
 
-IPFS is a modular suite of <VueCustomTooltip label="A set of standards, rules or procedures for transmitting data between computers, including how the information will be structured and how each computer will send and receive it. Notable examples include TCP/IP, HTTP/S, SMTP, and DNS." underlined multiline is-medium is-bottom>protocols</VueCustomTooltip> for organizing and transferring data, designed from the ground up with the principles of <VueCustomTooltip label="A way to address data by its hash rather than its location (IPs)." underlined multiline>content addressing</VueCustomTooltip> and <VueCustomTooltip label="A network of computers model in which each party has equivalent capabilities and can initiate a communication session." underlined multiline is-medium>peer-to-peer networking</VueCustomTooltip>. Because IPFS is <VueCustomTooltip label="Software released under a license that grants users the rights to use, study, change, and distribute the software and its source code to anyone and for any purpose. Open-source software is often developed in a collaborative public manner that encourages contributions from users." underlined multiline is-medium>open-source</VueCustomTooltip>, there are multiple <VueCustomTooltip label="Software, written in any programming language, with functionality to process and transmit content-addressed data. Some implementations are optimized for specific use cases or devices, or use different subsystems to handle content-addressed data. There are multiple specififactions in IPFS for handling content-addressed data, and not all implementations implement them." underlined multiline is-medium>implementations</VueCustomTooltip> of IPFS.
-While IPFS has more than one use case, its main use case is for publishing data (files, directories, websites, etc.) in a decentralised fashion.
+IPFS 是一套模块化的 <VueCustomTooltip label="一组用于在计算机之间传输数据的标准、规则或程序，包括信息的结构方式以及每台计算机如何发送和接收信息。值得注意的示例包括 TCP/IP、HTTP/S、SMTP 和 DNS。" underlined multiline is-medium is-bottom>协议</VueCustomTooltip>，用于组织和传输数据，从头开始设计，遵循 <VueCustomTooltip label="一种通过哈希而不是位置 (IP) 来寻址数据的方法。" underlined multiline>内容寻址</VueCustomTooltip> 和 <VueCustomTooltip label="一种计算机网络模型，其中每一方都具有同等能力并可以发起通信会话。" underlined multiline is-medium>点对点网络</VueCustomTooltip>。因为 IPFS 是 <VueCustomTooltip label="软件在授予用户使用、研究、更改和分发软件及其源代码给任何人和用于任何目的的许可下发布。开源软件通常以协作的公共方式开发，鼓励用户做出贡献。" underlined multiline is-medium>开源</VueCustomTooltip>，所以有多个 <VueCustomTooltip label="软件，用任何编程语言编写，具有处理和传输内容寻址数据的功能。某些实现针对特定用例或设备进行了优化，或者使用不同的子系统来处理内容寻址数据。IPFS 中有多个用于处理内容寻址数据的规范，但并非所有实现都实现了它们。" underlined multiline is-medium>实现</VueCustomTooltip>。
+虽然 IPFS 有多个用例，但其主要用例是以分散的方式发布数据（文件、目录、网站等）。
 
 :::callout
-This guide is part 1 of a 3-part introduction to [the basic concepts of IPFS](../concepts/README.md#learn-the-basics). The second part, [**IPFS and the problems it solves**](../concepts/ipfs-solves.md), covers the problems with the internet and current protocols like HTTP that IPFS solves.
+本指南是 [IPFS 基本概念](../concepts/README.md#learn-the-basics) 3 部分介绍中的第 1 部分。第二部分 [**IPFS 及其解决的问题**](../concepts/ipfs-solves.md) 涵盖了互联网和 IPFS 解决的 HTTP 等当前协议的问题。
 :::
 
-In this conceptual guide, you'll learn what IPFS is and isn't.
+在本概念指南中，您将了解IPFS是什么 ，不是什么。
 
-## Defining IPFS
+## 定义IPFS
 
-The term _IPFS_ can refer to multiple concepts:
+术语“IPFS”可以指多个概念：
 
-- An <VueCustomTooltip label="Software, written in any programming language, with functionality to process and transmit content-addressed data. Some implementations are optimized for specific use cases or devices, or use different subsystems to handle content-addressed data. There are multiple specififactions in IPFS for handling content-addressed data, and not all implementations implement them." underlined multiline is-medium>implementation</VueCustomTooltip> of IPFS protocol [specifications](https://github.com/ipfs/specs), such as <VueCustomTooltip label="The first implementation of IPFS, written in Go." underlined multiline>Kubo</VueCustomTooltip>. Learn more about [the principles that define an IPFS implementation](./implementations.md).
-- A 
-<VueCustomTooltip label="A network of computers in which multiple servers act as a single processing point, without having a central server to manage network activity." underlined multiline is-medium>decentralized network</VueCustomTooltip> composed of <VueCustomTooltip label="Computers participating in an IPFS network by running an IPFS implementation. Also referred to as peers" underlined multiline>IPFS nodes</VueCustomTooltip> that is open and participatory.
-- A modular suite of protocols and standards for organizing and transferring content-addressed data.
+- 一个 <VueCustomTooltip label="用任何编程语言编写的软件，具有处理和传输内容寻址数据的功能。一些实现针对特定用例或设备进行了优化，或者使用不同的子系统来处理内容寻址数据。IPFS 中有多个用于处理内容寻址数据的规范，但并非所有实现都实现了它们。" underlined multiline is-medium>实现</VueCustomTooltip> IPFS 协议 [规范](https://github.com/ipfs/specs)，例如 <VueCustomTooltip label="IPFS 的第一个实现，用 Go 编写。" underlined multiline>Kubo</VueCustomTooltip>。了解有关 [定义 IPFS 实现的原则](./implementations.md) 的更多信息。
+- 一个 由 <VueCustomTooltip label="通过运行 IPFS 实现参与 IPFS 网络的计算机。也称为对等点" underlined multiline>IPFS 节点</VueCustomTooltip> 组成的<VueCustomTooltip label="一个计算机网络，其中多个服务器充当单个处理点，而无需中央服务器来管理网络活动。" underlined multiline is-medium>去中心化网络</VueCustomTooltip>，是开放且参与性的。
+- 用于组织和传输内容寻址数据的模块化协议和标准套件。
 
-## What IPFS _isn't_
+## IPFS _不是什么_
 
-While IPFS shares similarities with, and is often used in architectures with the systems described below, IPFS is _not_:
+虽然 IPFS 与下述系统有相似之处，且经常用于此类系统的架构中，但 IPFS 并非如此：
 
-- A _storage provider_: While there are storage providers built with IPFS support (typically known as _pinning services_), IPFS itself is a protocol, not a provider.
-- _A <VueCustomTooltip label="An organization that provides its users with on-demand computing resources, such as databases and storage, over the internet." underlined multiline is-medium>cloud service provider</VueCustomTooltip>_: IPFS can be deployed on and complement cloud infrastructure, but it in of itself is not a cloud service provider.
+- _存储提供商_：虽然有使用 IPFS 支持构建的存储提供商（通常称为_固定服务_），但 IPFS 本身是一种协议，而不是提供商。
+- _<VueCustomTooltip label="通过互联网向用户提供按需计算资源（如数据库和存储）的组织。" underlined multiline is-medium>云服务提供商</VueCustomTooltip>_：IPFS 可以部署在云基础设施上并对其进行补充，但它本身并不是云服务提供商。
 
-## Further reading
-- For an overview of the problems that IPFS solves, see part 2 of a 3-part introduction to [the basic concepts of IPFS](../concepts/README.md#learn-the-basics), [**IPFS and the problems it solves**](../concepts/ipfs-solves.md).
-- Looking for a deeper dive on IPFS compared to other similar technologies? See the [IPFS Comparisons page](../concepts/comparisons.md).
+## 进一步阅读
+- 有关 IPFS 解决的问题的概述，请参阅对 [IPFS 的基本概念](../concepts/README.md#learn-the-basics)、[**IPFS 及其解决的问题**](../concepts/ipfs-solves.md) 的 3 部分介绍中的第 2 部分。
+- 想要深入了解 IPFS 与其他类似技术的比较？请参阅 [IPFS 比较页面](../concepts/comparisons.md)。
