@@ -3,47 +3,47 @@ title: Persistence
 description: Learn about how IPFS treats persistence and permanence on the web and how pinning can help keep data from being discarded.
 ---
 
-# Persistence, permanence, and pinning
+# 持久性、永久性和固定性
 
-Understand the concepts behind IPFS pinning, along with the differences between persistence, permanence, and pinning.
+了解 IPFS 固定背后的概念，以及持久性、永久性和固定之间的区别。
 
-## Persistence versus permanence
+## 持久性与永久性
 
-One goal of IPFS is to preserve humanity's history by letting users store data while minimizing the risk of that data being lost or accidentally deleted. This is often referred to as permanence. But what does permanence _actually_ mean, and why does it matter?
+IPFS 的一个目标是通过让用户存储数据来保存人类的历史，同时将数据丢失或意外删除的风险降至最低。这通常被称为永久性。但永久性 _实际上_ 是什么意思，为什么它很重要？
 
-A 2011 study found that the [average lifespan of a web page is 100 days](https://blogs.loc.gov/thesignal/2011/11/the-average-lifespan-of-a-webpage/) before it's gone forever. It's not good enough for the primary medium of our era to be this fragile. IPFS can keep every version of your file you wish to store, and make it simple to set up resilient networks for mirroring data.
+2011 年的一项研究发现，网页的平均寿命为 100 天，之后就会永远消失。我们这个时代的主要媒介如此脆弱是不够的。IPFS 可以保留你希望存储的文件的每个版本，并可以轻松设置用于镜像数据的弹性网络。
 
-Nodes on the IPFS network can automatically cache resources they download, and keep those resources available for other nodes. This system depends on nodes being willing and able to cache and share resources with the network. Storage is finite, so nodes need to clear out some of their previously cached resources to make room for new resources. This process is called _garbage collection_.
+IPFS 网络上的节点可以自动缓存它们下载的资源，并将这些资源保留给其他节点。该系统依赖于节点是否愿意并能够缓存并与网络共享资源。存储空间是有限的，因此节点需要清除一些先前缓存的资源，以便为新资源腾出空间。这个过程称为 _垃圾收集_。
 
-To ensure that data _persists_ on IPFS, and is not deleted during garbage collection, [data can be pinned](../how-to/pin-files.md) to one or more IPFS nodes. Pinning gives you control over disk space and data retention. As such, you should use that control to pin any content you wish to keep on IPFS indefinitely.
+为了确保数据在 IPFS 上 _持久_，并且在垃圾收集期间不会被删除，[可以将数据固定](../how-to/pin-files.md) 到一个或多个 IPFS 节点。固定功能可让你控制磁盘空间和数据保留。因此，你应该使用该控制来无限期地固定你希望保留在 IPFS 上的任何内容。
 
-## Garbage collection
+## 垃圾收集
 
-[Garbage collection](<https://en.wikipedia.org/wiki/Garbage_collection_(computer_science)>) is a form of automatic resource management widely used in software development. The garbage collector attempts to reclaim memory occupied by objects that are no longer in use. IPFS uses garbage collection to free disk space on your IPFS node by deleting data that it thinks is no longer needed.
+[垃圾收集](<https://en.wikipedia.org/wiki/Garbage_collection_(computer_science)>) 是一种广泛用于软件开发的自动资源管理形式。垃圾收集器尝试回收不再使用的对象占用的内存。 IPFS 使用垃圾收集功能，通过删除其认为不再需要的数据来释放 IPFS 节点上的磁盘空间。
 
-## Pinning in context
+## 上下文中的固定
 
-An IPFS node can protect data from garbage collection based on different kinds of user events:
+IPFS 节点可以根据不同类型的用户事件保护数据免遭垃圾收集：
 
-- The universal way is by adding a low-level [local pin](../how-to/pin-files.md). This works for all data types and can be done manually, but if you add a file using the CLI command [`ipfs add`](../reference/kubo/cli.md#ipfs-add), your IPFS node will automatically pin that file for you.
-- When working with files and directories, a better way may be to add them to the local [Mutable File System (MFS)](glossary.md#mfs). This protects the data from garbage collection in the same way as local pinning but is somewhat easier to manage.
+- 通用方法是添加低级 [本地固定](../how-to/pin-files.md)。这适用于所有数据类型，可以手动完成，但如果你使用 CLI 命令 [`ipfs add`](../reference/kubo/cli.md#ipfs-add) 添加文件，你的 IPFS 节点将自动为你固定该文件。
+- 处理文件和目录时，更好的方法可能是将它们添加到本地 [可变文件系统 (MFS)](glossary.md#mfs)。这可以像本地固定一样保护数据免遭垃圾收集，但管理起来更容易一些。
 
-::: tip
-If you want to learn more about how pinning fits into the overall lifecycle of data in IPFS, check out the course from [IPFS Camp _The Lifecycle of Data in DWeb_](https://www.youtube.com/watch?v=fLUq0RkiTBA).
+:::tip
+如果你想了解有关固定如何融入 IPFS 中数据的整体生命周期的更多信息，请查看 [IPFS Camp _DWeb 中的数据生命周期_](https://www.youtube.com/watch?v=fLUq0RkiTBA) 的课程。
 :::
 
-## Pinning services
+## 固定服务
 
-To ensure that your important data is retained, you may want to use a pinning service. These services run lots of IPFS nodes and allow users to pin data on those nodes for a fee. Some services offer a free storage allowance for new users. Pinning services are handy when:
+为了确保保留重要数据，你可能需要使用固定服务。这些服务运行大量 IPFS 节点，并允许用户付费将数据固定在这些节点上。某些服务为新用户提供免费存储限额。固定服务在以下情况下很方便：
 
-- You don't have a lot of disk space, but you want to ensure your data sticks around.
-- Your computer is a laptop, phone, or tablet that will have intermittent connectivity to the network. Still, you want to be able to access your data on IPFS from anywhere at any time, even when the device you added it from is offline.
-- You want a backup that ensures your data is always available from another computer on the network if you accidentally delete or garbage-collect your data on your own computer.
+- 你没有太多磁盘空间，但你想确保数据保留。
+- 你的计算机是笔记本电脑、手机或平板电脑，会间歇性地连接到网络。尽管如此，你仍然希望能够随时随地访问 IPFS 上的数据，即使你添加数据的设备处于离线状态。
+- 你需要一个备份，以确保如果你不小心删除或将数据作为垃圾收集到自己的计算机上，你的数据始终可以从网络上的另一台计算机获取。
 
-Some available pinning service providers are:
+一些可用的固定服务提供商是：
 
 :::warning
-Some of the pinning services listed below are operated by third party companies. There is no guarantee that these third party companies will continue to maintain their pinning service. It is strongly recommended that you thoroughly research a pinning service before using it to host your data.
+下面列出的一些固定服务由第三方公司运营。无法保证这些第三方公司将继续维护其固定服务。强烈建议你在使用固定服务托管数据之前对其进行彻底研究。
 :::
 
 - [4EVERLAND Bucket](https://www.4everland.org/bucket/)
@@ -53,18 +53,18 @@ Some of the pinning services listed below are operated by third party companies.
 - [Scaleway](https://labs.scaleway.com/en/ipfs-pinning/)
 - [Web3.Storage](https://web3.storage/)
 
-See how to [work with remote pinning services](../how-to/work-with-pinning-services.md).
+了解如何 [使用远程固定服务](../how-to/work-with-pinning-services.md)。
 
-## Long-term storage
+## 长期存储
 
-Storing data using a personal IPFS node is easy, but it can be inconvenient since you have to manage your own hardware. This problem gave rise to _pinning services_, paid services that allow you to upload your data to a remotely hosted IPFS node and retrieve it whenever you want. However, while paying a pinning service to store data is a convenient workaround, it still requires someone to bear the cost of storing that data. If that one sponsor stops paying for that pinning, the content may be lost entirely. While IPFS guarantees that any content on the network is discoverable, it doesn't guarantee that any content is persistently available. This is where [Filecoin](https://filecoin.io) comes in.
+使用个人 IPFS 节点存储数据很容易，但可能会不方便，因为你必须管理自己的硬件。这个问题催生了 _pinning 服务_·，这是一种付费服务，允许你将数据上传到远程托管的 IPFS 节点并随时检索。然而，虽然付费使用 pinning 服务来存储数据是一种方便的解决方法，但它仍然需要有人承担存储这些数据的成本。如果该赞助商停止为该 pinning 付费，内容可能会完全丢失。虽然 IPFS 保证网络上的任何内容都是可发现的，但它不能保证任何内容都是持久可用的。这就是 [Filecoin](https://filecoin.io) 的用武之地。
 
-### Storing data with Filecoin
+### 使用 Filecoin 存储数据
 
-[Filecoin](https://filecoin.io) is a decentralized storage network in which storage providers rent their storage space to clients. The client and the storage provider agree on how much data will be stored, for how long, and at what cost. This agreement is called a _deal_. Once both parties agree to a deal, the client sends the data to the storage provider, who periodically verifies that they are correctly storing the data. When the client wants the data back, they send a request to the storage provider, who initiates the data transfer back to the client. For more information on how Filecoin works, head over to the [official Filecoin documentation →](https://docs.filecoin.io/about/basics/how-filecoin-works/)
+[Filecoin](https://filecoin.io) 是一个去中心化的存储网络，存储提供商将其存储空间出租给客户。客户和存储提供商就存储多少数据、存储多长时间以及存储成本达成一致。该协议称为 _交易_。一旦双方同意交易，客户端就会将数据发送给存储提供商，存储提供商会定期验证他们是否正确存储了数据。当客户端想要取回数据时，他们会向存储提供商发送请求，存储提供商会启动将数据传输回客户端的过程。有关 Filecoin 工作原理的更多信息，请参阅 [官方 Filecoin 文档 →](https://docs.filecoin.io/about/basics/how-filecoin-works/)
 
-Filecoin provides users with a dependable, long-term storage solution. However, there are some limitations to consider. The retrieval process is not always as fast as an IPFS pinning service, and the minimum file size accepted by a Filecoin storage provider can be several GiB. Also, the process for creating a storage deal may seem complicated to new users who aren't familiar with blockchain transactions or simply aren't comfortable working within a command line.
+Filecoin 为用户提供了可靠的长期存储解决方案。但是，也有一些限制需要考虑。检索过程并不总是像 IPFS 固定服务那样快，并且 Filecoin 存储提供商接受的最小文件大小可能是几 GiB。此外，对于不熟悉区块链交易或不习惯在命令行中工作的新用户来说，创建存储交易的过程可能看起来很复杂。
 
-### IPFS + Filecoin solutions
+### IPFS + Filecoin 解决方案
 
-Fortunately, there is a growing community of tools and service providers that help simplify the process of making content available over IPFS while also persisting the data via Filecoin. These solutions make it simple to store data using decentralized protocols by acting both as IPFS pinning services and Filecoin storage platforms. Combining the two means that when you upload a file, that file is immediately available for download. Additionally, combined IPFS + Filecoin solutions will periodically bundle data and create a deal with a reputable Filecoin storage provider, ensuring that the data is available in long-term storage. Many solutions include API client libraries for developers to integrate into their apps and services, as well as web interfaces for quickly managing and inspecting files.
+幸运的是，越来越多的工具和服务提供商帮助简化了通过 IPFS 提供内容的过程，同时还通过 Filecoin 保存数据。这些解决方案通过充当 IPFS 固定服务和 Filecoin 存储平台，使使用分散协议存储数据变得简单。将两者结合起来意味着当你上传文件时，该文件可立即下载。此外，组合的 IPFS + Filecoin 解决方案将定期捆绑数据并与信誉良好的 Filecoin 存储提供商达成协议，确保数据可长期存储。许多解决方案包括 API 客户端库，供开发人员集成到他们的应用程序和服务中，以及用于快速管理和检查文件的 Web 界面。

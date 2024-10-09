@@ -4,52 +4,51 @@ description: Learn about user privacy in IPFS and why it does not come with a bu
 sidebarDepth: 2
 ---
 
-# Privacy and encryption
+# 隐私和加密
 
-As a protocol for peer-to-peer data storage and delivery, IPFS is a _public network_: Nodes participating in the network store data affiliated with globally consistent [content addresses](content-addressing.md) (CIDs) and advertise that they have those CIDs available for other nodes to use through publicly viewable [distributed hash tables](dht.md) (DHTs). This paradigm is one of IPFS's core strengths — at its most basic, it's essentially a globally distributed "server" of the network's total available data, referenceable both by the content itself (those CIDs) and by the participants (the nodes) who have or want the content.
+作为点对点数据存储和传输协议，IPFS 是一个 _公共网络_：参与网络的节点存储与全局一致的 [内容地址](content-addressing.md) (CID) 相关联的数据，并通过可公开查看的 [分布式哈希表](dht.md) (DHT) 宣传它们拥有可供其他节点使用的 CID。这种模式是 IPFS 的核心优势之一 - 从最基本的意义上讲，它本质上是网络总可用数据的全球分布式“服务器”，内容本身（那些 CID）和拥有或想要内容的参与者（节点）都可以引用。
 
-What this does mean, however, is that IPFS itself isn't explicitly protecting knowledge _about_ CIDs and the nodes that provide or retrieve them. This isn't something unique to the distributed web; on both the d-web and the legacy web, traffic and other metadata can be monitored in ways that can infer a lot about a network and its users. Some key details on this are outlined below, but in short: While IPFS traffic _between nodes_ is encrypted, the metadata those nodes publish to the DHT is public. Nodes announce a variety of information essential to the DHT's function — including their unique node identifiers (PeerIDs) and the CIDs of data that they're providing — and because of this, information about which nodes are retrieving and/or reproviding which CIDs is publicly available.
+然而，这确实意味着 IPFS 本身并没有明确保护有关 CID 以及提供或检索它们的节点的知识。这并不是分布式网络所独有的；在 d-web 和传统网络上，都可以监控流量和其他元数据，从而推断出很多有关网络及其用户的信息。下面概述了一些关键细节，但简而言之：虽然节点之间的 IPFS 流量是加密的，但这些节点发布到 DHT 的元数据是公开的。节点会公布对 DHT 功能至关重要的各种信息 - 包括它们的唯一节点标识符 (PeerID) 和它们提供的数据的 CID - 因此，有关哪些节点正在检索和/或重新提供哪些 CID 的信息是公开的。
 
-So, why doesn't the IPFS protocol itself explicitly have a _privacy layer_ built-in? This is in line with key principles of the protocol's highly modular design — after all, different uses of IPFS over its lifetime may call for different approaches to privacy. Explicitly implementing an approach to privacy within the IPFS core could "box in" future builders due to a lack of modularity, flexibility, and future-proofing. On the other hand, freeing those building on IPFS to use the best privacy approach for the situation at hand ensures IPFS is useful to as many as possible.
+那么，为什么 IPFS 协议本身没有明确内置隐私层？这符合协议高度模块化设计的关键原则 - 毕竟，IPFS 在其生命周期内的不同用途可能需要不同的隐私方法。在 IPFS 核心内明确实施隐私方法可能会因缺乏模块化、灵活性和面向未来性而“限制”未来的建设者。另一方面，让那些在 IPFS 上构建的人自由地使用最适合当前情况的隐私方法，确保 IPFS 对尽可能多的人有用。
 
-If you're worried about the implications of this, it might be worth taking additional measures such as disabling reproviding, encrypting sensitive content, or even running a private IPFS network if that's appropriate for you.
+如果你担心这方面的影响，可能值得采取额外措施，例如禁用重新提供、加密敏感内容，甚至运行私有 IPFS 网络（如果这对你来说合适）。
 
 ::: tip
-While IPFS traffic _between nodes_ is encrypted, the essential metadata that nodes publish to the DHT — including their unique node identifiers (PeerIDs) and the CIDs of data that they're providing — is public. If you're worried about the implications of this for your personal use case, it's worth taking additional measures.
+虽然节点之间的 IPFS 流量是加密的，但节点发布到 DHT 的基本元数据（包括其唯一节点标识符 (PeerID) 和它们提供的数据的 CID）是公开的。如果你担心这对你的个人用例的影响，则值得采取额外措施。
 :::
 
-## What's public on IPFS
+## IPFS 上公开的内容
 
-All traffic on IPFS is public, including the contents of files themselves, unless they're [encrypted](#encryption). For purposes of understanding IPFS privacy, this may be easiest to think about in two halves: content identifiers (CIDs) and IPFS nodes themselves.
+IPFS 上的所有流量都是公开的，包括文件本身的内容，除非它们是 [加密](#encryption)。为了理解 IPFS 隐私，最简单的方法可能是将其分为两部分：内容标识符 (CID) 和 IPFS 节点本身。
 
-### Content identifiers
+### 内容标识符
 
-Because IPFS uses [content addressing](content-addressing.md) rather than the legacy web's method of location addressing, each piece of data stored in the IPFS network gets its own unique content identifier (CID). Copies of the data associated with that CID can be stored in any number of locations worldwide on any number of participating IPFS nodes. To make retrieving the data associated with a particular CID efficient and robust, IPFS uses a [distributed hash table](dht.md) (DHT) to keep track of what's stored where. When you use IPFS to retrieve a particular CID, your node queries the DHT to find the closest nodes to you with that item — and by default also agrees to re-provide that CID to other nodes for a limited time until periodic "garbage collection" clears your cache of content you haven't used in a while. You can also "pin" CIDs that you want to make sure are never garbage-collected — either explicitly using IPFS's low-level `pin` API or implicitly using the [Mutable File System](file-systems.md#mutable-file-system-mfs) (MFS) — which also means you're acting as a permanent reprovider of that data.
+由于 IPFS 使用 [内容寻址](content-addressing.md) 而不是传统网络的位置寻址方法，因此存储在 IPFS 网络中的每条数据都有其自己的唯一内容标识符 (CID)。与该 CID 关联的数据副本可以存储在全球任意数量的参与 IPFS 节点上的任意数量的位置。为了使检索与特定 CID 关联的数据变得高效且可靠，IPFS 使用 [分布式哈希表](dht.md) (DHT) 来跟踪存储的内容。当你使用 IPFS 检索特定 CID 时，你的节点会查询 DHT 以找到离你最近的具有该项目的节点 — 并且默认情况下还同意在有限的时间内将该 CID 重新提供给其他节点，直到定期“垃圾收集”清除你一段时间未使用的内容缓存。你还可以“固定”要确保永远不会被垃圾收集的 CID — 要么明确使用 IPFS 的低级“pin”API，要么隐式使用 [可变文件系统](file-systems.md#mutable-file-system-mfs) (MFS) — 这也意味着你将充当该数据的永久重新提供者。
 
-This is one of the advantages of IPFS over traditional legacy web hosting. It means retrieving files — especially popular ones that exist on lots of nodes in the network — can be faster and more bandwidth-efficient. However, it's important to note that those DHT queries happen in public. Because of this, it's possible that third parties could be monitoring this traffic to determine what CIDs are being requested, when, and by whom. As IPFS continues to grow in popularity, it's more likely that such monitoring will exist.
+这是 IPFS 相对于传统旧式网络托管的优势之一。这意味着检索文件 — 尤其是存在于网络中许多节点上的热门文件 — 可以更快、更节省带宽。但是，需要注意的是，这些 DHT 查询是公开进行的。因此，第三方可能会监控此流量以确定请求了哪些 CID、何时请求以及由谁请求。随着 IPFS 的普及，这种监控更有可能存在。
 
-### Node identifiability
+### 节点可识别性
 
-The other half of the equation when considering the prospect of IPFS traffic monitoring is that nodes' unique identifiers are themselves public. Just like with CIDs, every individual IPFS node has its own public identifier (known as a PeerID), such as `QmRGgYP1P5bjgapLaShMVhGMSwGN9SfYG3CM2TfhpJ3igE`.
+在考虑 IPFS 流量监控的前景时，等式的另一半是节点的唯一标识符本身是公开的。与 CID 一样，每个单独的 IPFS 节点都有自己的公共标识符（称为 PeerID），例如`QmRGgYP1P5bjgapLaShMVhGMSwGN9SfYG3CM2TfhpJ3igE`。
 
-While a long string of letters and numbers may not be a "Johnny Appleseed" level of human-readable specificity, your PeerID is still a long-lived, unique identifier for your node. Keep in mind that it's possible to do a DHT lookup on your PeerID and, particularly if your node is regularly running from the same location (like your home), find your IP address. (It's possible to [reset your PeerID](../reference/kubo/cli.md#ipfs-key-rotate) if necessary, but similarly to changing your user ID on legacy web apps and services, is likely to involve extra effort.) Additionally, longer-term monitoring of the public IPFS network could yield information about what CIDs your node is requesting and/or reproviding and when.
+虽然一串长字母和数字可能不是“Johnny Appleseed”级别的人类可读特异性，但你的 PeerID 仍然是你节点的长期唯一标识符。请记住，可以对你的 PeerID 进行 DHT 查找，特别是如果你的节点经常从同一位置（例如你的家）运行，则可以找到你的 IP 地址。 （如有必要，可以[重置你的 PeerID](../reference/kubo/cli.md#ipfs-key-rotate)，但与在旧版 Web 应用和服务上更改用户 ID 类似，可能需要付出额外努力。）此外，对公共 IPFS 网络的长期监控可以提供有关你的节点正在请求和/或重新提供哪些 CID 以及何时提供的信息。
 
+### 加密
 
-### Encryption
+网络中有两种加密类型：_传输加密_和_内容加密_。
 
-There are two types of encryption in a network: _transport-encryption_ and _content-encryption_.
+传输加密用于在双方之间发送数据。Albert 加密文件并将其发送给 Laika，Laika 收到文件后对其进行解密。这样可以阻止第三方在数据从一个地方移动到另一个地方时查看数据。
 
-Transport-encryption is used when sending data between two parties. Albert encrypts a file and sends it to Laika, who then decrypts it once it has been received. This stops a third party from viewing the data while it is moving from one place to another.
+![显示传输加密工作原理的粗略图表。](./images/transport-encryption.png)
 
-![A rough diagram showing how transport-encryption works.](./images/transport-encryption.png)
+内容加密用于保护数据，直到有人需要访问它。Albert 为他的月度预算创建了一个电子表格，并使用密码保存了它。当 Albert 需要再次访问它时，他必须输入密码才能解密文件。没有密码，Laika 就无法查看文件。
 
-Content encryption is used to secure data until someone needs to access it. Albert creates a spreadsheet for his monthly budget and saves it with a password. When Albert needs to access it again, he must enter his password to decrypt the file. Without the password, Laika cannot view the file.
+![显示内容加密工作原理的粗略图表。](./images/content-encryption.png)
 
-![A rough diagram showing how content-encryption works.](./images/content-encryption.png)
+IPFS 使用传输加密，但不使用内容加密。这意味着你的数据在从一个 IPFS 节点发送到另一个 IPFS 节点时是安全的。但是，只要有 CID，任何人都可以下载和查看该数据。没有内容加密是故意为之。你无需强制使用特定的加密协议，而是可以自由选择最适合你项目的方法。这种模块化设计使 IPFS 保持轻量级，并且不受“供应商锁定”的影响。
 
-IPFS uses transport-encryption but not content encryption. This means that your data is secure when being sent from one IPFS node to another. However, anyone can download and view that data if they have the CID. The lack of content encryption is an intentional decision. Instead of forcing you to use a particular encryption protocol, you are free to choose whichever method is best for your project. This modular design keeps IPFS lightweight and free of _vendor lock-in_.
-
-### Encryption-based projects using IPFS
+### 使用 IPFS 的基于加密的项目
 
 - [Ceramic](https://ceramic.network/)
 - [Fission.codes](https://fission.codes/)

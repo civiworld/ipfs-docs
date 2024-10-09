@@ -10,13 +10,13 @@ related:
   'Wikipedia: Content-addressable storage': https://en.wikipedia.org/wiki/Content-addressable_storage
 ---
 
-# Immutability
+# 不变性
 
-An immutable object is an object whose state cannot be altered or modified once created. Once a file is added to the IPFS network, the content of that file cannot be changed without altering the [content identifier (CID)](../concepts/content-addressing.md) of the file. This feature is excellent for storing data that does not need to change. However, when it comes to content that needs to be altered or updated, immutability becomes a problem. This page discusses how to keep a mutable _state_ built from immutable building blocks.
+不可变对象是一旦创建就无法更改或修改其状态的对象。将文件添加到 IPFS 网络后，如果不更改文件的 [内容标识符 (CID)](../concepts/content-addressing.md)，则无法更改该文件的内容。此功能非常适合存储不需要更改的数据。但是，当涉及到需要更改或更新的内容时，不变性就会成为一个问题。本页讨论了如何保持由不可变构建块构建的可变状态。
 
-A CID is an _absolute_ pointer to content. No matter when we request a CID, the CID value will always be the same. This is part of the content's architecture and cannot be changed. To manage _immutable_ files in a _mutable_ system, we need to add another layer that sits on top of CIDs.
+CID 是指向内容的绝对指针。无论我们何时请求 CID，CID 值都将始终相同。这是内容架构的一部分，无法更改。要在可变系统中管理不可变文件，我们需要在 CID 之上添加另一层。
 
-As a basic example, let's have two blocks of content with the strings `hello` and `world` hashed into two leaf nodes with the CIDs `A` and `B`. If we concatenate these two nodes, then we are given CID `C`. On top of this root CID, we assign a pointer `Pointer`.
+作为一个基本示例，我们将两个内容块中的字符串`hello` 和`world`散列到两个叶节点中，其 CID 分别为 `A` 和 `B`。如果我们连接这两个节点，那么我们将得到 CID `C`。在这个根 CID 之上，我们分配一个指针“Pointer”。
 
 ```shell
    +-----------+
@@ -33,7 +33,7 @@ As a basic example, let's have two blocks of content with the strings `hello` an
 "hello"    "world"
 ```
 
-If we change the content of `B` to `IPFS!`, all the upstream paths will change as well. In this simple example, the only upstream path is `C`. If we request content from the pointer we get back new content since the pointer is now _pointing_ at a completely different node. Node `B` is not being edited, updated, or otherwise changed. Instead, we are creating a new DAG where the pointer points to CID `E` that joins node `A` and a new node, node `D`.
+如果我们将`B`的内容更改为`IPFS!`，则所有上游路径也会发生变化。在这个简单的示例中，唯一的上游路径是`C`。如果我们从指针请求内容，我们会得到新内容，因为指针现在指向完全不同的节点。节点`B`未被编辑、更新或以其他方式更改。相反，我们正在创建一个新的 DAG，其中指针指向连接节点`A`和新节点`D`的 CID `E`。
 
 ```shell
    +-----------+
@@ -50,11 +50,11 @@ If we change the content of `B` to `IPFS!`, all the upstream paths will change a
 "hello"    "world"     "hello"    "IPFS!"
 ```
 
-Again, node `B` does not change. It will always refer to the same content, `world`. Node `A` also appears in the new DAG. This does not necessarily mean we copied the memory/buffer that contained the `hello` string into our new message; that would imply the location-addressed paradigm that focuses on the _where_ and not the _what_. In a content-addressed system, any time someone writes the string `hello` it will always have CID `A`, regardless of whether we copied the string from a previous location or we wrote it from scratch.
+同样，节点 `B` 不会改变。它将始终引用相同的内容`world`。节点`A`也出现在新的 DAG 中。这并不一定意味着我们将包含`hello`字符串的内存/缓冲区复制到我们的新消息中；这意味着位置寻址范式关注的是`哪里`而不是`什么`。在内容寻址系统中，任何时候有人写字符串`hello`，它总是有 CID `A`，无论我们是从以前的位置复制字符串还是从头开始编写它。
 
-## Example
+## 例子
 
-In this example, we have a website that displays two headers called `header_1` and `header_2`. The content of the headers is supplied from the variables `string_1` and `string_2`.
+在此示例中，我们有一个网站，显示两个标题，分别称为`header_1`和`header_2`。标题的内容由变量`string_1`和`string_2`提供。
 
 ```html
 <body>
@@ -69,9 +69,9 @@ In this example, we have a website that displays two headers called `header_1` a
 </script>
 ```
 
-The CID of this website is `QmWLdyFMUugMtKZs1xeJCSUKerWd9M627gxjAtp6TLrAgP`. Users can go to [`example.com/QmWLdyFMUugMtKZs1xeJCSUKerWd9M627gxjAtp6TLrAgP`](https://gateway.pinata.cloud/ipfs/QmWLdyFMUugMtKZs1xeJCSUKerWd9M627gxjAtp6TLrAgP) to view the site. If we change `string_2` to `IPFS` then the CID of the website changes to `Qme1A6ofTweQ1JSfLLdkoehHhpbAAk4Z2hWjyNC7YJF9m5`. Now users can go to [`example.com/Qme1A6ofTweQ1JSfLLdkoehHhpbAAk4Z2hWjyNC7YJF9m5`](https://gateway.pinata.cloud/ipfs/Qme1A6ofTweQ1JSfLLdkoehHhpbAAk4Z2hWjyNC7YJF9m5).
+该网站的 CID 为 `QmWLdyFMUugMtKZs1xeJCSUKerWd9M627gxjAtp6TLrAgP`。用户可以前往 [`example.com/QmWLdyFMUugMtKZs1xeJCSUKerWd9M627gxjAtp6TLrAgP`](https://gateway.pinata.cloud/ipfs/QmWLdyFMUugMtKZs1xeJCSUKerWd9M627gxjAtp6TLrAgP) 查看该网站。如果我们将 `string_2` 更改为 `IPFS`，则该网站的 CID 更改为 `Qme1A6ofTweQ1JSfLLdkoehHhpbAAk4Z2hWjyNC7YJF9m5`。现在用户可以访问 [`example.com/Qme1A6ofTweQ1JSfLLdkoehHhpbAAk4Z2hWjyNC7YJF9m5`](https://gateway.pinata.cloud/ipfs/Qme1A6ofTweQ1JSfLLdkoehHhpbAAk4Z2hWjyNC7YJF9m5)。
 
-Having a user visit the site using the CID is cumbersome since the CID will change every time a variable is updated. So instead, we can use a _pointer_ that maintains the CID of the page with the latest update. This way, users can go to `example.com`, and always be directed to the latest content. This pointer is _mutable_; it can be updated to reflect the changes downstream.
+让用户使用 CID 访问网站很麻烦，因为每次更新变量时 CID 都会发生变化。因此，我们可以使用一个指针来维护最新更新页面的 CID。这样，用户可以访问`example.com`，并始终被引导到最新内容。此指针是可变的；可以对其进行更新以反映下游的更改。
 
 ```shell
 +--------+      +---------+      +----------+
@@ -79,7 +79,7 @@ Having a user visit the site using the CID is cumbersome since the CID will chan
 +--------+      +---------+      +----------+
 ```
 
-In the website example, when we change a variable, the CID of the webpage is different. The pointer must be updated to redirect users to the latest webpage. What's important is that the _old_ CID still exists. Nothing is overwritten. The original CID `QmWLdyFMUugMtKZs1xeJCSUKerWd9M627gxjAtp6TLrAgP` will always refer to a webpage with the headers `hello` and `world`. What we're doing is constructing a new [DAG](../concepts/merkle-dag.md).
+在网站示例中，当我们更改变量时，网页的 CID 会有所不同。必须更新指针以将用户重定向到最新网页。重要的是旧 CID 仍然存在。没有任何内容被覆盖。原始 CID `QmWLdyFMUugMtKZs1xeJCSUKerWd9M627gxjAtp6TLrAgP`将始终引用带有标题`hello`和`world`的网页。我们正在做的是构建一个新的 [DAG](../concepts/merkle-dag.md)。
 
 ```shell
 +--------+      +---------+      +----------+
@@ -91,7 +91,7 @@ In the website example, when we change a variable, the CID of the webpage is dif
                                  +----------+
 ```
 
-This process is essentially what the [InterPlantery Naming Service (IPNS)](../concepts/ipns.md) does! CIDs can be difficult to deal with and hard to remember, so IPNS saves users from the cumbersome task of dealing with CIDs directly. More importantly, CIDs change with the content because they are the content. Whereas the inbound reference of URLs/pointers stay the same, and the outbound referral changes:
+此过程本质上就是 [InterPlantery 命名服务 (IPNS)](../concepts/ipns.md) 所做的！CID 可能难以处理且难以记住，因此 IPNS 可让用户免于直接处理 CID 的繁琐任务。更重要的是，CID 会随内容而变化，因为它们就是内容。而 URL/指针的入站引用保持不变，出站引用会发生变化：
 
 ```shell
 +--------+      +----------------+      +-------------------------------------------------------------+
